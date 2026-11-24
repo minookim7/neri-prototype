@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Neri — Prototype v7</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Figtree:wght@400;500;600;700&family=Fredoka:wght@500;600&display=swap" rel="stylesheet">
+<style>
+/* Neri prototype v6 — from the Nov 23 review.
+   Tabs: Home · Discover · Journey · Profile. Journey = cut-paper landscape with parent + baby footsteps. */
+:root{color-scheme:light;
+--paper:#F5F0E6;--raised:#FBF8F2;--sunk:#ECE5D8;--ink:#362C25;--muted:#6E6054;--on-ink:#FBF8F2;--line:#DDD3C3;--strong:#948474;--focus:#5E7A93;
+--clay:#B5583A;--clay-soft:#EFD8CC;--clay-deep:#8A3A22;--ochre:#D4A548;--ochre-soft:#F4E6C4;--ochre-deep:#7A5A16;
+--sage:#8C9C7A;--sage-soft:#E2E6D6;--sage-deep:#4E5D3F;--denim:#5E7A93;--denim-soft:#DCE4EA;--denim-deep:#3A5068;
+--blush:#D9A796;--blush-soft:#F3E1D9;--blush-deep:#8A4A38;
+--serif:'Fraunces',Georgia,serif;--sans:'Figtree',system-ui,sans-serif;--play:'Fredoka',system-ui,sans-serif;
+--r-sm:6px;--r:12px;--shadow:0 1px 0 rgba(54,44,37,.04),0 8px 24px rgba(54,44,37,.07)}
+:root[data-theme=lamplight]{color-scheme:dark;
+--paper:#221C17;--raised:#2C251F;--sunk:#1A1511;--ink:#F1E8DA;--muted:#B8A994;--on-ink:#221C17;--line:#3E352C;--strong:#7E6F61;--focus:#8FA9C0;
+--clay:#D47A5A;--clay-soft:#3B2720;--clay-deep:#E89B7E;--ochre:#E2BA62;--ochre-soft:#3A3020;--ochre-deep:#EBCB85;
+--sage:#A9B894;--sage-soft:#2B3126;--sage-deep:#C2CFAF;--denim:#8FA9C0;--denim-soft:#232D36;--denim-deep:#B4C8DA;
+--blush:#E2B5A5;--blush-soft:#3A2822;--blush-deep:#EDBBAA;--shadow:none}
+
+:root{--plum:#8C6A8A;--plum-soft:#EADFE8;--plum-deep:#5E4260;
+--age0:#E4CFB2;--age1:#C29E74;--age2:#8E6A46;--age3:#54392A}
+:root[data-theme=lamplight]{--plum:#B896B5;--plum-soft:#33262F;--plum-deep:#D6BDD3}
+*{box-sizing:border-box;min-width:0;margin:0}
+[hidden]{display:none!important}
+body{background:#D8CFC1;font:16px/1.55 var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased;display:flex;justify-content:center;overflow-x:clip}
+:root[data-theme=lamplight] body{background:#0F0C0A}
+button,input,select{font:inherit;color:inherit}
+button{background:none;border:0;cursor:pointer;text-align:inherit;padding:0}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px;border-radius:6px}
+#phone{position:relative;width:100%;max-width:430px;height:100vh;height:100dvh;background:var(--paper);overflow:hidden}
+@media(min-width:600px){body{align-items:center;padding:24px;min-height:100vh}#phone{height:min(900px,calc(100vh - 48px));border-radius:40px;box-shadow:0 30px 80px rgba(0,0,0,.25),0 0 0 10px #2A221C}}
+.proto{position:absolute;top:5px;left:50%;transform:translateX(-50%);z-index:60;font-size:10px;letter-spacing:.08em;color:var(--muted);white-space:nowrap}
+.screen{position:absolute;inset:0;display:none;flex-direction:column}.screen.on{display:flex}
+.top{flex:none;display:flex;align-items:center;gap:10px;padding:24px 20px 8px;background:var(--paper)}
+main{flex:1;overflow-y:auto;padding:6px 20px 112px;scrollbar-width:none}
+main::-webkit-scrollbar{display:none}
+.mark{font:italic 500 26px var(--serif);margin-right:auto;display:flex;align-items:center;gap:4px}
+.title{font:500 26px var(--serif);margin-right:auto}
+.star{display:inline-block;width:12px;height:12px;background:var(--ochre);clip-path:polygon(50% 0,61% 38%,100% 38%,68% 61%,79% 100%,50% 76%,21% 100%,32% 61%,0 38%,39% 38%)}
+.round{width:44px;height:44px;border-radius:50%;border:1px solid var(--strong);display:grid;place-items:center;flex:none;background:var(--raised)}
+h1{font:500 32px/1.08 var(--serif);letter-spacing:-.01em;text-wrap:balance;margin:6px 0 8px}
+h1 i,h2 i{font-weight:400}
+h2{font:500 23px/1.15 var(--serif);margin:0 0 4px}
+.mast{font:500 11.5px var(--serif);letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+.instr{font:italic 400 15px/1.45 var(--serif);color:var(--muted);margin:0 0 12px}
+p{margin:0 0 10px}.muted{color:var(--muted)}.small{font-size:14px}
+.btn{min-height:48px;padding:0 22px;border-radius:99px;font-weight:600;font-size:15.5px;display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--strong);background:var(--raised)}
+.btn.ink{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}
+.btn.wide{width:100%}
+.btn.sm{min-height:40px;padding:0 16px;font-size:14px}
+.link{color:var(--denim-deep);font-weight:600;text-decoration:underline;text-underline-offset:3px;min-height:44px;display:inline-flex;align-items:center}
+:root[data-theme=lamplight] .link{color:var(--denim)}
+.chip{flex:none;min-height:40px;padding:0 14px;border-radius:99px;border:1px solid var(--strong);font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:7px;white-space:nowrap;background:var(--raised)}
+.chip.on{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chips.scroll{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:0 -20px;padding:2px 20px}
+.dot{width:10px;height:10px;border-radius:50%;flex:none;display:inline-block}
+.adot{width:11px;height:11px;border-radius:3px;flex:none;display:inline-block;transform:rotate(45deg)}
+.tag{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:600;color:var(--muted);background:var(--sunk);border-radius:99px;padding:3px 10px;white-space:nowrap}
+/* pictures */
+.pic{position:relative;overflow:hidden;background:var(--sunk);border-radius:var(--r)}
+.pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.pic svg.fb{position:absolute;inset:0;width:100%;height:100%}
+.pic.nf img{display:none}
+.hero{aspect-ratio:16/9}.hero.tall{aspect-ratio:4/3}
+/* category symbol tiles */
+.sym{position:relative;display:grid;place-items:center;border-radius:10px;aspect-ratio:1;overflow:hidden}
+.sym::before{content:"";position:absolute;width:78%;height:70%;left:14%;top:18%;background:currentColor;opacity:.13;border-radius:46% 54% 40% 60%/55% 45% 55% 45%;transform:rotate(-8deg)}
+.sym svg{position:relative;width:46%;height:46%}
+/* cards */
+.card{background:var(--raised);border:1px solid var(--line);border-radius:var(--r);padding:18px;box-shadow:var(--shadow)}
+.week .pic{border-radius:var(--r) var(--r) 0 0}
+.week{padding:0;overflow:hidden}.week .in{padding:16px 18px 18px}
+.week h2{font-size:28px;margin:6px 0 10px}
+.forline{font:500 19px var(--serif);margin:0}
+.ageline{font-size:14px;color:var(--muted);margin:2px 0 14px;display:flex;align-items:center;gap:7px}
+.invite{background:var(--ochre-soft);border:0;box-shadow:none;margin-top:16px}
+.invite .mast{color:var(--ochre-deep)}
+.invite p:not(.mast){font:italic 400 18px/1.5 var(--serif);color:var(--ink);margin:8px 0 0}
+.bday{background:var(--blush-soft);border-radius:var(--r);padding:14px 16px;margin-bottom:14px}
+.bday b{font:500 18px var(--serif)}
+.kids{display:flex;gap:8px;flex-wrap:wrap;margin:2px 0 14px}
+.hello h1{font-size:38px;margin:2px 0 2px}
+.hello .sub{font:italic 400 17px/1.4 var(--serif);color:var(--muted);margin:0 0 16px}
+/* guide sections */
+.sec{padding:26px 0 6px}
+.sh{display:flex;align-items:center;gap:12px;margin:0 0 12px}
+.sh .n{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font:600 16px var(--play);color:#FFFDF8;flex:none}
+.sh h3{font:500 25px/1.15 var(--serif);margin:0}
+.verse{font:500 22px/1.4 var(--serif);margin:6px 0 10px}
+.verse sup{font:600 11px var(--sans);color:var(--ochre-deep);margin-right:3px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+details{border-top:1px solid var(--line);margin-top:12px}
+details>summary{list-style:none;cursor:pointer;min-height:48px;display:flex;align-items:center;justify-content:space-between;font-weight:600;gap:10px}
+details>summary::-webkit-details-marker{display:none}
+details>summary::after{content:"";width:9px;height:9px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);transition:transform .3s;flex:none;margin-right:4px}
+details[open]>summary::after{transform:rotate(-135deg)}
+details .dbody{padding:0 0 12px}
+.parts{display:grid;gap:8px}
+.part{border:1px solid var(--line);border-radius:var(--r-sm);padding:10px 12px;background:var(--raised)}
+.part b{display:block;font-size:12.5px;color:var(--muted);letter-spacing:.04em}
+.part p{font:17px/1.5 var(--serif);margin:2px 0 0}
+.seg{display:inline-flex;border:1px solid var(--strong);border-radius:99px;padding:2px}
+.seg button{border-radius:99px;padding:0 12px;min-height:36px;font-size:13.5px;font-weight:600;color:var(--muted)}
+.seg button.on{background:var(--ink);color:var(--on-ink)}
+.sing{display:flex;align-items:center;gap:14px;background:var(--sage-soft);border-radius:var(--r);padding:14px}
+.playbtn{width:56px;height:56px;border-radius:50%;background:var(--ink);color:var(--on-ink);display:grid;place-items:center;flex:none}
+.sing b{font:500 18px var(--serif);display:block}
+.sing .small{color:var(--sage-deep)}
+.acts{display:grid;gap:10px}
+.act{display:grid;grid-template-columns:84px 1fr;gap:14px;align-items:center;width:100%;background:var(--raised);border:1px solid var(--line);border-radius:var(--r);padding:8px 12px 8px 8px;min-height:100px}
+.act .cat{font:600 21px/1.1 var(--serif);display:block}
+.act .nm{font-size:14px;color:var(--muted);margin:2px 0 6px;display:block}
+.act .tags{display:flex;gap:5px;flex-wrap:wrap}
+ul.moments{list-style:none;padding:0;display:grid;gap:12px}
+ul.moments li{display:grid;grid-template-columns:30px 1fr;gap:12px;align-items:start}
+ul.moments li span{font:600 16px var(--play);width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--denim-soft);color:var(--denim-deep)}
+ul.moments b{display:block;font:500 17px var(--serif)}
+.prayer{font:italic 400 19px/1.6 var(--serif);background:var(--blush-soft);border-radius:var(--r);padding:16px 18px}
+.truth{font:500 21px/1.35 var(--serif)}
+.donebox{margin:26px 0 8px;padding:16px;border:1px dashed var(--strong);border-radius:var(--r);display:flex;align-items:center;gap:12px}
+.donebox p{margin:0;flex:1;font-size:14.5px;color:var(--muted)}
+.donebox.done{border-style:solid;border-color:var(--ochre);background:var(--ochre-soft)}
+.donebox.done p{color:var(--ink)}
+/* activity sheet */
+.sheet{position:absolute;inset:0;background:rgba(34,28,23,.5);z-index:40;display:none;align-items:flex-end}
+.sheet.on{display:flex}
+.panel{background:var(--paper);width:100%;max-height:94%;overflow-y:auto;border-radius:20px 20px 0 0;padding:10px 20px 28px;animation:up .5s cubic-bezier(.2,.8,.2,1)}
+@keyframes up{from{transform:translateY(30px);opacity:0}}
+.grab{width:40px;height:5px;border-radius:9px;background:var(--line);margin:0 auto 10px}
+.ptop{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}
+.ws{border:1px solid var(--strong);border-radius:var(--r);padding:3px;margin-top:14px;background:var(--raised)}
+.ws>div{border:1px solid var(--line);border-radius:9px;padding:4px 16px}
+.wr{display:grid;grid-template-columns:64px 1fr;gap:12px;padding:14px 0;border-top:1px solid var(--line)}
+.wr:first-child{border-top:0}
+.wr>b{font:500 11.5px var(--serif);letter-spacing:.2em;text-transform:uppercase;color:var(--muted);padding-top:3px}
+.wr ul,.wr ol{padding-left:18px}.wr li{margin:2px 0}
+.say{font:italic 17px/1.45 var(--serif);margin:0 0 8px}
+.corner{background:var(--ochre-soft);border-radius:var(--r-sm);padding:10px 12px}
+.corner b{font:500 11px var(--serif);letter-spacing:.2em;text-transform:uppercase;color:var(--ochre-deep);display:block;margin-bottom:2px}
+.corner ol{padding-left:18px;margin:4px 0 0}.corner li{margin:3px 0}
+.faith{font:500 18px/1.4 var(--serif)}
+.lv{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.lv div{border:1px solid var(--line);border-radius:var(--r-sm);padding:10px 12px;font-size:14.5px;background:var(--paper)}
+.lv b{display:block;font-size:12px;color:var(--muted);font-weight:600}
+.safe{font-size:14.5px;border-left:3px solid var(--clay);padding:2px 0 2px 10px;margin-top:12px}
+.swap{font-size:14.5px;background:var(--sage-soft);border-radius:var(--r-sm);padding:10px 12px;margin-top:10px}
+.from{display:flex;align-items:center;gap:12px;background:var(--sunk);border-radius:var(--r);padding:12px 14px;margin-top:14px}
+.from p{margin:0;flex:1;font-size:14px}.from b{display:block;font:500 17px var(--serif)}
+/* discover / profile */
+.label{font:600 13px var(--sans);color:var(--muted);margin:18px 0 8px}
+.bigl{font:500 25px var(--serif);margin:34px 0 6px}
+.lib{display:grid;gap:0;border-top:1px solid var(--line)}
+.lib .it{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);min-height:64px;width:100%}
+.lib .it b{display:block;font:500 17px var(--serif)}
+.lib .it span{font-size:13.5px;color:var(--muted)}
+.lib .it[disabled]{opacity:.55;cursor:default}
+.lib .th{width:56px;height:42px;flex:none;border-radius:8px}
+.lib .bk{font:italic 15px var(--serif);color:var(--muted);padding:14px 0 4px}
+.empty{padding:22px;text-align:center;color:var(--muted);border:1px dashed var(--strong);border-radius:var(--r)}
+.kid{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.kid .av{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font:600 18px var(--play);color:#FBF8F2;flex:none}
+.kid .r{flex:1}.kid b{display:block;font:500 19px var(--serif)}
+.field{display:grid;gap:6px;margin:12px 0}
+.field label{font-weight:600;font-size:14.5px}
+.field input,.field select{min-height:48px;border:1px solid var(--strong);border-radius:var(--r-sm);background:var(--raised);padding:0 14px;font-size:16px;width:100%}
+.note{font-size:13px;color:var(--muted)}
+.set{padding:0}
+.set>div{padding:16px 18px;border-top:1px solid var(--line)}
+.set>div:first-child{border-top:0}
+.set h4{font:600 15px var(--sans);margin:0 0 4px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.set .v{font-size:14.5px;color:var(--muted);margin:0}
+.check{color:var(--sage-deep);font-weight:700}
+/* journey */
+#s-journey .top{padding-bottom:4px}
+.jsub{padding:0 20px 10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.jsub p{margin:0;font-size:14.5px;color:var(--muted);margin-right:auto}
+.mapwrap{position:relative;flex:1;margin-bottom:84px;overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.map{position:absolute;inset:0;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;cursor:grab;touch-action:pan-x;-webkit-overflow-scrolling:touch}
+.map::-webkit-scrollbar{display:none}
+.map.drag{cursor:grabbing}
+.map svg{display:block;height:100%;user-select:none;-webkit-user-select:none}
+:root[data-theme=lamplight] .map svg{filter:brightness(.72) saturate(.85)}
+.psalm{position:absolute;top:12px;left:14px;right:14px;z-index:2;pointer-events:none;text-align:center;font:italic 400 17px/1.35 var(--serif);color:#3A2E26;background:rgba(251,248,242,.82);border-radius:12px;padding:10px 14px;box-shadow:0 2px 10px rgba(54,44,37,.08)}
+.psalm span{display:block;font:500 10.5px var(--serif);letter-spacing:.2em;text-transform:uppercase;color:#7A5A16;margin-top:4px;font-style:normal}
+.mapbtns{position:absolute;right:12px;top:112px;z-index:2;display:flex;gap:8px}
+.mapbtns .chip{background:rgba(251,248,242,.92);color:#362C25;border-color:#948474}
+@keyframes lightup{0%{transform:scale(.6);opacity:.2}60%{transform:scale(1.25);opacity:1}100%{transform:scale(1)}}
+.step.new .feet{animation:lightup 1.4s cubic-bezier(.2,.8,.2,1) .4s both;transform-box:fill-box;transform-origin:center}
+@keyframes glow{0%,100%{opacity:.55}50%{opacity:1}}
+.step.lit .halo{animation:glow 3.2s ease-in-out infinite}
+/* tabs */
+.tabbar{position:absolute;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(4,1fr);padding:6px 8px 16px;background:color-mix(in srgb,var(--paper) 94%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);z-index:20}
+.tabbar button{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:12px;font-weight:600;color:var(--muted);padding:6px 0;min-height:52px}
+.tabbar svg{width:24px;height:24px}
+.tabbar button.on{color:var(--ink)}
+.tabbar button.on .ti{background:var(--ochre-soft);border-radius:99px}
+.tabbar .ti{width:52px;height:30px;display:grid;place-items:center}
+.tabbar.hide{display:none}
+.toast{position:absolute;left:50%;bottom:96px;transform:translateX(-50%);background:var(--ink);color:var(--on-ink);padding:10px 16px;border-radius:99px;font-size:14px;z-index:70;opacity:0;transition:opacity .4s;pointer-events:none;white-space:nowrap}
+.toast.on{opacity:1}
+.onb main{padding-bottom:40px}
+/* printable guide */
+#printDoc{display:none}
+@media print{
+ @page{size:letter;margin:.45in}
+ html,body{background:#fff!important}
+ body{display:block;padding:0;min-height:0}
+ #phone,.toast{display:none!important}
+ #printDoc{display:block;color:#362C25;font:10.5pt/1.42 var(--sans);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+#printDoc .pg{height:10.06in;border:1px solid #948474;padding:.055in;break-after:page;page-break-after:always;box-sizing:border-box;overflow:hidden}
+#printDoc .pg:last-child{break-after:auto;page-break-after:auto}
+#printDoc .pin{height:100%;border:1px solid #DDD3C3;padding:.22in .34in .14in;display:flex;flex-direction:column;box-sizing:border-box}
+#printDoc p{margin:0}
+#printDoc .pmh{text-align:center;font:500 8.5pt var(--serif);letter-spacing:.24em;text-transform:uppercase;color:#6E6054}
+#printDoc .prh{margin-top:4pt}
+#printDoc .pstar{display:block;width:10pt;height:10pt;margin:3pt auto 0}
+#printDoc .ph1{text-align:center;font:500 30pt/1.05 var(--serif);letter-spacing:-.01em;margin:4pt 0 2pt}
+#printDoc .ph1 i{font-weight:400}
+#printDoc .ph2{font:500 24pt/1.1 var(--serif);margin:2pt 0 2pt}
+#printDoc .ph3{font:500 18pt/1.1 var(--serif);margin:2pt 0 1pt}
+#printDoc .psub{text-align:center;font:italic 400 11.5pt var(--serif);color:#6E6054}
+#printDoc .psub.l,#printDoc .pg .pkind+.ph2+.psub{text-align:left}
+#printDoc .pkind{display:flex;align-items:center;gap:6pt;font:500 9pt var(--serif);letter-spacing:.2em;text-transform:uppercase;color:#6E6054;margin-top:10pt}
+#printDoc .dot{width:8pt;height:8pt;border-radius:50%;display:inline-block;flex:none}
+#printDoc .cells{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid #DDD3C3;margin-top:10pt}
+#printDoc .cell{padding:7pt 12pt 8pt;border-bottom:1px solid #DDD3C3}
+#printDoc .cell.l{border-right:1px solid #DDD3C3;padding-left:0}
+#printDoc .cell:not(.l):not(.full){padding-right:0}
+#printDoc .cell.full{grid-column:1/-1;padding-left:0;padding-right:0}
+#printDoc .ct{display:flex;align-items:center;gap:5pt;font:500 9pt var(--serif);letter-spacing:.2em;text-transform:uppercase;margin:0 0 3pt;color:#362C25}
+#printDoc .ct svg{width:13pt;height:13pt;flex:none}
+#printDoc .ci{font:italic 400 10.5pt var(--serif);color:#6E6054;margin-bottom:4pt}
+#printDoc .pverse{font:500 15pt/1.3 var(--serif);margin-bottom:5pt}
+#printDoc .pverse span{font:500 8.5pt var(--serif);letter-spacing:.2em;text-transform:uppercase;color:#7A5A16;margin-left:4pt}
+#printDoc .pparts{display:grid;grid-template-columns:repeat(3,1fr);gap:10pt;font-size:10pt;line-height:1.4}
+#printDoc .pparts b{display:block;font:500 8pt var(--serif);letter-spacing:.18em;text-transform:uppercase;color:#6E6054;margin-bottom:1pt}
+#printDoc .plyric{font:400 12pt/1.5 var(--serif);margin-bottom:6pt}
+#printDoc .plyric span{font:italic 10pt var(--serif);color:#6E6054}
+#printDoc .psmall{font-size:10pt}
+#printDoc ol,#printDoc ul{margin:3pt 0 0;padding-left:14pt}
+#printDoc li{margin:0 0 3pt}
+#printDoc .pact{font-size:10pt}
+#printDoc .plist{list-style:none;padding:0}
+#printDoc .plist li{display:grid;grid-template-columns:12pt 1fr;align-items:start;margin-bottom:5pt}
+#printDoc .plist .dot{margin-top:4pt}
+#printDoc .plist b{display:block;font:500 12pt/1.25 var(--serif)}
+#printDoc .plist span{font-size:9.5pt;color:#6E6054}
+#printDoc .ppray{font:italic 400 12pt/1.45 var(--serif);background:#F3E1D9;border-radius:6pt;padding:8pt 11pt;margin-top:2pt}
+#printDoc .pbig{display:flex;align-items:center;gap:14pt;border-bottom:0}
+#printDoc .pbig .ct{margin:0}
+#printDoc .ptruth{font:500 15pt var(--serif)}
+#printDoc .pul li,#printDoc .pol li{margin-bottom:3pt}
+#printDoc .psay{font:italic 400 12pt/1.4 var(--serif);margin-bottom:5pt}
+#printDoc .psteps{display:grid;grid-template-columns:repeat(3,1fr);gap:12pt;margin-top:4pt}
+#printDoc .psteps figure{margin:0}
+#printDoc .stp{position:relative;aspect-ratio:3/2;border-radius:6pt;overflow:hidden;border:1px solid #DDD3C3;background:#ECE5D8}
+#printDoc .stp svg,#printDoc .stp img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+#printDoc figcaption{display:grid;grid-template-columns:18pt 1fr;gap:1pt 6pt;margin-top:7pt}
+#printDoc .psn{grid-row:span 2;width:17pt;height:17pt;border-radius:50%;background:#F4E6C4;color:#7A5A16;display:grid;place-items:center;font:500 10pt var(--serif)}
+#printDoc figcaption b{font:500 12pt/1.2 var(--serif)}
+#printDoc figcaption span:last-child{font-size:10pt;line-height:1.4}
+#printDoc .pcorner{background:#F4E6C4;border-radius:6pt;padding:8pt 10pt;margin-bottom:8pt}
+#printDoc .pcorner .ct{color:#7A5A16}
+#printDoc .pfaith{font:500 12.5pt/1.35 var(--serif)}
+#printDoc .cell p+p{margin-top:4pt}
+#printDoc .psafe{border-left:2.5pt solid #B5583A;padding-left:7pt;margin-top:6pt}
+#printDoc .pact2{flex:1;display:flex;flex-direction:column}
+#printDoc .pact2.second{border-top:1px dashed #948474;margin-top:10pt;padding-top:2pt}
+#printDoc .pfoot{margin-top:auto;padding-top:8pt;display:flex;align-items:center;justify-content:center;gap:8pt;font:500 8pt var(--serif);letter-spacing:.24em;text-transform:uppercase;color:#6E6054;position:relative}
+#printDoc .pfoot .pstar{margin:0;width:9pt;height:9pt}
+#printDoc .pnum{position:absolute;right:0;letter-spacing:.1em}
+#printDoc .pcols{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid #DDD3C3}
+#printDoc .pcl{border-right:1px solid #DDD3C3}
+#printDoc .pcl .cell{padding-left:0;border-bottom:0}
+#printDoc .pcr .cell{padding-right:0;border-bottom:0}
+#printDoc .pcr .cell+.cell{border-top:1px solid #DDD3C3}
+#printDoc .pcols+.cells{border-top:0;margin-top:0}
+#printDoc .pmom{padding:0;list-style:none}
+#printDoc .pmom li{font-size:10pt}
+#printDoc .pmom b{display:block;font:500 11.5pt var(--serif)}
+#printDoc .pmom li{margin-bottom:5pt}
+#printDoc .pparts p{margin-top:0!important}
+
+/* v7: icon set, filters, steps */
+.ic{display:block;flex:none}
+.tabbar button.on .ti{background:none!important}
+.tabbar .ti{height:28px}
+.tabbar button.on{color:var(--ink);font-weight:700}
+.tabbar button.on svg{stroke-width:2.2}
+.tstar{width:9px;height:9px;background:var(--ochre);clip-path:polygon(50% 0,61% 38%,100% 38%,68% 61%,79% 100%,50% 76%,21% 100%,32% 61%,0 38%,39% 38%);opacity:0;margin-top:1px}
+.tabbar button.on .tstar{opacity:1}
+.sh .n{width:42px;height:42px;background:var(--c);color:var(--d)}
+.sh .n svg{width:22px;height:22px}
+.sh h3 small{display:block;font:500 11px var(--serif);letter-spacing:.22em;color:var(--muted);margin-bottom:1px}
+.ptop .round{width:40px;height:40px}
+.qrow{display:flex;gap:5px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-top:2px}
+.qrow::-webkit-scrollbar{display:none}
+.qf{flex:1 0 auto;min-height:36px;padding:0 6px;border:1px dashed var(--strong);border-radius:6px;font-size:12.5px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:4px;white-space:nowrap;color:var(--muted)}
+.qf .bx{width:11px;height:11px;border:1.5px solid currentColor;border-radius:3px;display:grid;place-items:center;flex:none}
+.qf.on{border-style:solid;border-color:var(--sage-deep);background:var(--sage-soft);color:var(--sage-deep)}
+.qf.on .bx{background:var(--sage-deep);border-color:var(--sage-deep)}
+.qf.on .bx::after{content:"";width:5px;height:2.5px;border-left:1.8px solid var(--sage-soft);border-bottom:1.8px solid var(--sage-soft);transform:translateY(-1px) rotate(-45deg)}
+.steps{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -20px;padding:2px 20px 6px;scrollbar-width:none}
+.steps::-webkit-scrollbar{display:none}
+.stc{flex:0 0 84%;scroll-snap-align:start;margin:0;background:var(--raised);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.stp{position:relative;aspect-ratio:3/2;background:var(--sunk)}
+.stp svg,.stp img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.stc figcaption{padding:12px 14px 14px;display:grid;grid-template-columns:28px 1fr;gap:2px 10px}
+.stc .sn{grid-row:span 2;width:28px;height:28px;border-radius:50%;background:var(--ochre-soft);color:var(--ochre-deep);display:grid;place-items:center;font:600 14px var(--serif)}
+.stc b{font:500 18px/1.2 var(--serif)}
+.stc figcaption span:last-child{font-size:14.5px}
+.steph{display:flex;justify-content:space-between;align-items:baseline;margin-top:6px}
+.lib .th.mk{background:var(--sunk);display:grid;place-items:center;overflow:hidden}
+.lib .th.mk svg{width:44px;height:44px}
+.bday{display:flex;gap:12px;align-items:flex-start}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media(max-width:360px){h1{font-size:28px}.act{grid-template-columns:72px 1fr}.lv{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="phone"><div class="proto">Neri prototype v7 · Nov 23 review</div>
+
+<!-- ONBOARDING -->
+<section class="screen onb" id="s-welcome">
+  <header class="top"><span class="mark">Neri<span class="star"></span></span></header>
+  <main>
+    <div class="pic hero" data-img="hero"></div>
+    <p class="mast" style="margin-top:20px">Learning Scripture through play</p>
+    <h1>Bible stories you <i>play</i> with your little one.</h1>
+    <p class="muted">One story each month, with play ideas for your child’s age.</p>
+    <div class="card" style="margin-top:14px">
+      <p class="mast" style="margin-bottom:2px">Your family account</p>
+      <div class="field"><label for="kEmail">Your email</label><input id="kEmail" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com"></div>
+      <p class="note">We’ll email you a sign-in link, so there’s no password to remember. The other parent signs in with the same email on their phone, and you both see the same family.</p>
+      <div class="field"><label for="kName">Your child’s first name</label><input id="kName" autocomplete="off" placeholder="e.g. Cove"></div>
+      <div class="field"><label for="kBirth">Birthday</label><input id="kBirth" type="date"></div>
+      <p class="note">We use the birthday to pick play ideas that fit their age.</p>
+      <button class="btn ink wide" id="startBtn" style="margin-top:8px">Create our family account</button>
+      <p class="note" id="startErr" role="alert" style="color:var(--clay-deep);margin-top:8px"></p>
+    </div>
+    <p class="note" style="margin-top:12px">More than one child? You can add them in Profile. Prototype: no email is sent yet.</p>
+  </main>
+</section>
+
+<!-- HOME -->
+<section class="screen" id="s-home">
+  <header class="top"><span class="mark">Neri<span class="star"></span></span><button class="round" data-theme-toggle aria-label="Switch day or night theme"><i data-ic="lamp" data-s="20"></i></button></header>
+  <main>
+    <div class="kids" id="homeKids"></div>
+    <div id="bday"></div>
+    <div class="hello"><p class="mast">Learning Scripture through play</p><h1 id="hello"></h1><p class="sub" id="helloSub"></p></div>
+    <div class="card week">
+      <div class="pic hero" data-img="hero"></div>
+      <div class="in">
+        <p class="mast">This week · Genesis 1:1–5</p>
+        <h2>God made light</h2>
+        <p class="forline" id="homeFor"></p>
+        <p class="ageline" id="homeAge"></p>
+        <button class="btn ink wide" data-go="guide">Open this week’s guide</button>
+      </div>
+    </div>
+    <div class="card invite">
+      <p class="mast">This week’s little invitation</p>
+      <p>When you open the curtains each morning, pause by the window with your child and say, “Good morning, light. God made you.” Let the ordinary moments carry the story this week.</p>
+    </div>
+  </main>
+</section>
+
+<!-- WEEKLY GUIDE -->
+<section class="screen" id="s-guide">
+  <header class="top"><button class="round" data-back aria-label="Back"><i data-ic="back" data-s="20"></i></button><span class="mast" style="margin-right:auto">This week’s guide</span><button class="round" data-print aria-label="Print this week’s guide"><i data-ic="print" data-s="20"></i></button></header>
+  <main>
+    <div class="pic hero" data-img="hero"></div>
+    <h1 style="margin-top:16px">God made light</h1>
+    <p class="muted" id="gMeta" style="margin-bottom:6px"></p>
+    <div class="row" style="margin-bottom:4px"><button class="link" id="ageSwitch" style="gap:6px">Show activities for another age</button></div>
+    <div class="chips" id="ageChips" hidden style="margin:4px 0 8px"></div>
+    <div id="sibNote"></div>
+
+    <section class="sec" id="g-scripture">
+      <div class="sh"><span class="n" style="--c:var(--ochre-soft);--d:var(--ochre-deep)"><i data-ic="scripture"></i></span><h3><small>1</small>Scripture</h3></div>
+      <p class="verse"><sup>3</sup>And God said, Let there be light: and there was light.</p>
+      <div class="row"><button class="btn ink" id="listen"><i data-ic="listen" data-s="16"></i><span>Listen</span></button><span class="note">Memory verse for the month</span></div>
+      <p class="small" id="scrTip" style="margin:12px 0 0"></p>
+      <details id="dParts"><summary>Read the whole passage in three short parts</summary><div class="dbody">
+        <div class="parts" id="parts"></div>
+        <div class="row" style="margin-top:10px"><span class="small muted">Translation</span><div class="seg" id="trans"><button data-t="kjv">KJV</button><button data-t="web">WEB</button></div></div>
+      </div></details>
+      <p class="small muted" style="margin-top:10px">Have a picture Bible at home? Read its creation page alongside this. Pictures help little ones follow.</p>
+    </section>
+
+    <section class="sec" id="g-sing">
+      <div class="sh"><span class="n" style="--c:var(--sage-soft);--d:var(--sage-deep)"><i data-ic="sing"></i></span><h3><small>2</small>Sing</h3></div>
+      <div class="sing"><button class="playbtn" id="playSong" data-tune aria-label="Play the tune"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z" fill="currentColor"/></svg></button><div><b>God made light</b><span class="small">To the tune of “Twinkle, Twinkle, Little Star”</span><br><button class="link" id="lyricsBtn" style="min-height:36px">Words and actions</button></div></div>
+    </section>
+
+    <section class="sec" id="g-play">
+      <div class="sh"><span class="n" style="--c:var(--clay-soft);--d:var(--clay-deep)"><i data-ic="play"></i></span><h3><small>3</small>Explore through play</h3></div>
+      <p class="instr">Pick one a day, or repeat a favourite. Little ones love doing the same thing again.</p>
+      <div class="acts" id="acts"></div>
+    </section>
+
+    <section class="sec" id="g-moments">
+      <div class="sh"><span class="n" style="--c:var(--denim-soft);--d:var(--denim-deep)"><i data-ic="everyday"></i></span><h3><small>4</small>Everyday moments</h3></div>
+      <p class="instr">No set-up. Notice light as your day happens.</p>
+      <ul class="moments" id="moments"></ul>
+    </section>
+
+    <section class="sec" id="g-prayer">
+      <div class="sh"><span class="n" style="--c:var(--blush-soft);--d:var(--blush-deep)"><i data-ic="prayer"></i></span><h3><small>5</small>Prayer</h3></div>
+      <p class="instr">A simple prayer to say with your child, or a starting point for your own words.</p>
+      <div class="prayer" id="prayer"></div>
+      <p class="small" id="prayHow" style="margin-top:10px"></p>
+    </section>
+
+    <section class="sec" id="g-found">
+      <div class="sh"><span class="n" style="--c:var(--sunk);--d:var(--ink)"><i data-ic="corner"></i></span><h3><small>6</small>Biblical foundation</h3></div>
+      <p class="truth">Big truth: God made light, and it is good.</p>
+      <details><summary>Read the foundation for parents</summary><div class="dbody">
+        <p>Before anything else was made, God spoke, and light came. Light is the first gift of creation: it lets us see everything else He made. Genesis 1 shows a God who brings order out of darkness and calls what He makes good.</p>
+        <p>For a baby or toddler, this is learned through the body before it is understood in words: the warmth of morning sun, the comfort of a lamp at night, the delight of a torch in a dark room. When you name these moments (“God made light”), you are laying down the first, simplest truth about who God is: the Maker, who is good.</p>
+        <p class="small muted">Later in Scripture, Jesus says, “I am the light of the world” (John 8:12). You don’t need to explain that yet. It is where this story is going.</p>
+        <p class="note" style="border-top:1px dashed var(--line);padding-top:8px">Draft. Before launch, every foundation will be reviewed by someone trained in theology and early education.</p>
+      </div></details>
+    </section>
+
+    <div class="donebox" id="doneBox"></div>
+    <button class="btn wide" data-print style="margin-top:8px">Print this week’s guide</button>
+  </main>
+</section>
+
+<!-- DISCOVER -->
+<section class="screen" id="s-discover">
+  <header class="top"><span class="title">Discover</span></header>
+  <main>
+    <p class="label" style="margin-top:4px">For which age?</p>
+    <div class="chips scroll" id="dAges"></div>
+    <p class="label">Kind of play</p>
+    <div class="chips scroll" id="dCats"></div>
+    <p class="label">Quick filters</p>
+    <div class="qrow"><button class="qf" id="fNoPrep" aria-pressed="false"><span class="bx"></span>No prep</button><button class="qf" id="fQuick" aria-pressed="false"><span class="bx"></span>≤ 5 min</button><button class="qf" id="fDeep" aria-pressed="false"><span class="bx"></span>Longer play</button><button class="qf" id="fOut" aria-pressed="false"><span class="bx"></span>Outdoors</button></div>
+    <p class="label" id="dCount"></p>
+    <div class="acts" id="dActs"></div>
+    <h2 class="bigl">By Bible story</h2>
+    <p class="small muted" style="margin:0 0 10px">Twelve stories, one each month.</p>
+    <div class="lib" id="lib"></div>
+  </main>
+</section>
+
+<!-- JOURNEY -->
+<section class="screen" id="s-journey">
+  <header class="top"><span class="title">Our journey</span><button class="round" id="favBtn" aria-label="Favourite activities"><i data-ic="keep" data-s="20"></i></button></header>
+  <div class="jsub"><p id="jCount"></p></div>
+  <div class="mapwrap">
+    <div class="psalm" id="psalm"></div>
+    <div class="map" id="map"></div>
+    <div class="mapbtns"><button class="chip" id="toStart">Where we started</button><button class="chip" id="toNow">Latest step</button></div>
+  </div>
+</section>
+
+<!-- PROFILE -->
+<section class="screen" id="s-profile">
+  <header class="top"><span class="title">Profile</span></header>
+  <main>
+    <p class="label" style="margin-top:4px">Your children</p>
+    <div id="kidList"></div>
+    <button class="btn wide" id="addKid" style="margin-top:12px">Add a child</button>
+    <form id="kidForm" class="card" hidden style="margin-top:12px">
+      <div class="field" style="margin-top:0"><label for="nName">First name</label><input id="nName" autocomplete="off"></div>
+      <div class="field"><label for="nBirth">Birthday</label><input id="nBirth" type="date"></div>
+      <div class="row"><button class="btn ink" type="submit">Save</button><button class="btn" type="button" id="cancelKid">Cancel</button></div>
+    </form>
+
+    <p class="label" style="margin-top:28px">Settings</p>
+    <div class="card set">
+      <div><h4>Account</h4><p class="v" id="accEmail"></p><p class="note" style="margin:8px 0 0">Mom and Dad can both sign in with this email, on two phones at once. Progress and favourites stay in sync.</p><button class="btn sm" id="invite" style="margin-top:10px">Invite the other parent</button></div>
+      <div><h4>Language <span class="v">English <span class="check">✓</span></span></h4><p class="note" style="margin:6px 0 0">Neri is in English for now. Please contact <a class="link" style="min-height:0;display:inline" href="mailto:hello@neri.app?subject=Neri%20in%20my%20language">hello@neri.app</a> to request the app in your language.</p></div>
+      <div><h4>Share Neri</h4><p class="note" style="margin:0 0 10px">Know a parent who’d love this? Send them the app.</p><button class="btn sm" id="shareApp"><i data-ic="share" data-s="16"></i>Share the app</button></div>
+      <div><h4>Theme <div class="seg" id="themeSeg"><button data-th="paper">Day</button><button data-th="lamplight">Night feeds</button></div></h4></div>
+      <div><h4>Bible translation <div class="seg" id="transSeg"><button data-t="kjv">KJV</button><button data-t="web">WEB</button></div></h4></div>
+    </div>
+    <p class="note" style="margin-top:16px">Prototype v7. Illustrations, step pictures and the Journey landscape are drafts made with Krea (Seedream 5.5). Icons from the Neri icon set. Scripture is read by an ElevenLabs voice. Activities for 18–36 months are Jamie’s; the others are drafts for Esther and Jamie to review.</p>
+    <button class="link" id="reset" style="margin-top:6px">Start the prototype over</button>
+  </main>
+</section>
+
+<nav class="tabbar hide" id="tabbar" aria-label="Main">
+  <button data-tab="home"><span class="ti"><i data-ic="home"></i></span>Home<span class="tstar"></span></button>
+  <button data-tab="discover"><span class="ti"><i data-ic="discover"></i></span>Discover<span class="tstar"></span></button>
+  <button data-tab="journey"><span class="ti"><i data-ic="ages"></i></span>Journey<span class="tstar"></span></button>
+  <button data-tab="profile"><span class="ti"><i data-ic="child"></i></span>Profile<span class="tstar"></span></button>
+</nav>
+
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="pTitle"><div class="panel" id="panel"></div></div>
+<div class="toast" id="toast" role="status"></div>
+</div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+<filter id="nWob" x="-2%" y="-2%" width="104%" height="104%"><feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="2.4"/></filter>
+<filter id="nGrain"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="9"/><feColorMatrix values="0 0 0 0 .35 0 0 0 0 .28 0 0 0 0 .2 0 0 0 .55 0"/></filter>
+<marker id="nArr" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M1 1L8 5L1 9" fill="none" stroke="#8A7A62" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+<marker id="nArrS" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M1 1L8 5L1 9" fill="none" stroke="#8A7A62" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+<marker id="nArrG" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M1 1L8 5L1 9" fill="none" stroke="#E9C46A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+</defs></svg>
+<div id="printDoc" aria-hidden="true"></div>
+<script>
+{
+const KREA='https://app-uploads.krea.ai/public/';
+const VOICE='https://app-uploads.krea.ai/audio/';
+/* softer voice, Nov 23: ElevenLabs "Sarah", eleven_v4 */
+const READ={verse:'d4c8c0f4-a1de-4425-b62e-1cda16ba768b',p1:'d5d8235a-ca35-4a76-95ca-825fb311c5d2',p2:'a8d11a0b-be5a-4134-aee1-c7b35281d94f',p3:'93573e6c-7713-413b-bb88-312561de509d'};
+const IMG={"hero":"01e9d404-846b-4863-bf4b-2079b50dc323","a18-sensory":"66058837-9221-4679-8966-001d17318024","a0-sensory":"7fb534dd-cb0d-4b32-b532-6a68c2de770d","a0-movement":"999a79ce-5939-44cc-be4f-b6c06418a925","a0-cog":"5c939f05-87b6-40d0-9a2a-495d3017286c","a0-art":"f6e61a01-191b-411e-9287-e613db72c54f","a0-music":"72b04f00-947e-42fe-88f9-75c93573d632","a6-sensory":"fc0e4f59-8185-423c-bc0f-ff77230c7ae6","a6-movement":"a63e7d06-c80c-453d-ab90-61a4806cef7c","a6-cog":"623135ec-9165-4cd8-a33a-448e7da49ea4","a6-art":"8aa883d5-debe-4d56-a4ae-c74146600ff7","a6-music":"a899a123-1cd2-4da9-b8df-20486ad5e923","a12-sensory":"88382bd3-2f72-48f0-b369-760431744e1a","a12-movement":"db5929ab-05c9-4084-b8b9-a5c02acda14a","a12-cog":"6dd6ea81-2250-4124-9ae0-5b9b5e325eee","a12-art":"c42641f1-f349-4c82-b370-86760a06775e","a12-science":"52cd5593-6523-4daa-a910-de52bf837ef4","a18-movement":"71a860ee-5535-4d6d-9c89-b758c6eb6f86","a18-cog":"ca200db9-2b51-4483-a147-5d1cc86f50c6","a18-art":"144cc85d-9042-4ed6-8b6f-c618652dd175","a18-science":"61ef5666-f24c-4057-844b-6dff754416f2"};
+const ACT={
+a0:[
+ {k:'sensory',t:'Light and shadow',min:'3–5 min',prep:'none',where:'Indoors',need:['A window with soft daylight','A thin, light scarf'],do:['Lay your baby on their back near the window, out of direct sun.','Slowly pass the scarf between the light and your baby, so a soft shadow drifts over them.','Pause and watch where their eyes go. Stop when they turn away.'],say:['“Here’s the light… and here’s the shadow.”','“You’re looking at the window. God made light.”'],mind:'Babies tell you they’ve had enough by turning away, yawning or fussing. Stopping then is following their lead.',faith:'God made light.',lv:['Hold the scarf still and let the shadow rest.','Move it slowly side to side so they can track it.'],safe:'Keep sunlight out of your baby’s eyes. Put the scarf away afterwards.'},
+ {k:'movement',t:'Reach for the light',min:'3 min',prep:'none',where:'Indoors',need:['A blanket','A patch of sunlight, or a lamp on the floor'],do:['Lay your baby on their tummy on the blanket, facing the sunny patch.','Lie down on the other side of the light, face to face.','Cheer each time they lift their head toward you and the light.'],say:['“Up you come! Look at the light.”'],mind:'Tummy time is hard work. A minute or two, a few times a day, is plenty.',faith:'God made light, and He made you strong.',lv:['Try tummy time on your chest instead.','Put a toy in the light, just out of reach.'],safe:'Stay with your baby the whole time during tummy time.',rain:'No sun today? A lamp on the floor works just as well.'},
+ {k:'cog',t:'Light on, light off',min:'3 min',prep:'none',where:'Indoors',need:['A small lamp'],do:['In a dim room, sit with your baby on your lap facing the lamp.','Turn it on and say “Light!” Then wait.','Turn it off and say “Dark.” Wait again. Repeat slowly.'],say:['“Light!” … “Dark.” … “Light! God made the light.”'],mind:'The pause is the lesson. Around 4–6 months, watch for your baby to start expecting the change.',faith:'God said, “Let there be light,” and there was light.',lv:['Two or three slow turns is enough.','Wait longer before switching. See if they look at the lamp first.']},
+ {k:'art',t:'Colours in the window',min:'5 min',prep:'light',where:'Indoors',need:['A few squares of coloured cellophane (or coloured plastic bags)','Tape'],do:['Tape the coloured squares high on a sunny window.','Hold your baby up so they can look at the coloured light.','Name each colour slowly as they look.'],say:['“Yellow light. And blue. So bright.”'],mind:'At this age, your face and voice are part of the art. Look together and take your time.',faith:'God made light, and all the colours too.',lv:['Hold your baby close and look at one colour.','Let them see the colours land on their hands.'],safe:'Tape the squares high, out of reach.'},
+ {k:'music',t:'Good morning, light',min:'2 min',prep:'none',where:'Indoors',need:['A window with curtains'],do:['Each morning, carry your baby to the window.','Open the curtains together and sing the first line of this week’s song.','Name what you see: sun, sky, a tree.'],say:['“Good morning, light. God made you.”'],mind:'Doing the same thing every morning becomes a little ritual your baby will start to expect.',faith:'God made the morning.',lv:['Just open the curtain and say the line.','Pause before “light” and let them babble back.']}],
+a6:[
+ {k:'sensory',t:'Shiny treasure basket',min:'5–10 min',prep:'light',where:'Indoors',need:['A low basket','Big things that catch the light: a steel bowl, a wooden spoon, a crinkly scarf'],do:['Set the basket beside a bright window with your baby sitting up.','Let your baby choose what to pick up, and how.','Sit close and say what they discover.'],say:['“You found the shiny bowl. I can see the light in it.”'],mind:'Try not to hand things over. Waiting while your baby reaches is how they learn to reach.',faith:'God made light. It makes things shine.',lv:['Two or three things only.','Add a small mirror (baby-safe) to see the light bounce.'],safe:'Every item must be bigger than your baby’s mouth. Check them before each play.'},
+ {k:'movement',t:'Crawl to the sunbeam',min:'5 min',prep:'none',where:'Indoors',need:['A patch of sunlight on the floor'],do:['Put your baby down a short crawl away from the sunny patch.','Sit on the far side of the light with your arms open.','When they reach the light, celebrate together in the warm spot.'],say:['“Come to the light! You made it. It’s warm here.”'],mind:'If they aren’t crawling yet, let them roll or scoot. Moving toward something they want is what matters.',faith:'God made light, and it is good.',lv:['Start very close to the sunny patch.','Move the patch further away, or add a cushion to crawl over.'],rain:'No sun? Shine a torch on the floor and let them crawl to the spot.'},
+ {k:'cog',t:'Where did the light go?',min:'3–5 min',prep:'none',where:'Indoors',need:['A small light-up toy or torch','A cloth'],do:['Show your baby the glowing toy.','Cover it with the cloth and ask, “Where did the light go?”','Wait. Let your baby pull the cloth off, then celebrate the light coming back.'],say:['“Where did the light go? … There it is!”'],mind:'If your baby looks for the light under the cloth, they’re learning that things still exist when hidden.',faith:'God is with us, even when we can’t see.',lv:['Cover only half the toy.','Hide it under one of two cloths.'],safe:'An adult holds the torch. Never shine it in eyes.'},
+ {k:'art',t:'Pat the colours',min:'5 min',prep:'light',where:'Indoors',need:['Clear sticky-back plastic (contact paper)','Big squares of tissue paper','Tape'],do:['Tape the sticky sheet to the high-chair tray, sticky side up.','Put a few big tissue squares nearby.','Let your baby pat, press and pull them off.'],say:['“Pat, pat. It’s sticky! You pulled the blue one off.”'],mind:'Pulling off counts as much as sticking on. Both are good work.',faith:'God made light, and all the colours too.',lv:['Two big squares.','More colours, smaller pieces (still bigger than their mouth).'],safe:'Stay within reach. Babies mouth paper.'},
+ {k:'music',t:'Twinkle fingers',min:'3 min',prep:'none',where:'Anywhere',need:['Nothing at all'],do:['Sit facing your baby.','Sing this week’s song and wiggle your fingers on “stars”.','Stop and wait. See if they wiggle, clap or babble back, then carry on.'],say:['“Twinkle, twinkle… your turn!”'],mind:'Pausing for your baby to answer is the start of conversation, even before words.',faith:'God made the stars.',lv:['You do the actions; they watch.','Help them clap on the beat.']}],
+a12:[
+ {k:'sensory',t:'Chase the light',min:'5–10 min',prep:'none',where:'Indoors',need:['A torch','A dim room'],do:['Dim the room and shine a soft spot of light on the wall or floor.','Move it slowly so your toddler can follow and pat it.','Let them “catch” it, then move it somewhere new.'],say:['“You caught the light! Where will it go now?”'],mind:'Slow down when they slow down. The game is theirs.',faith:'God made light, and it was good.',lv:['Keep the light low and still.','Move it up the wall so they stretch and reach.'],safe:'An adult holds the torch. Keep the floor clear and never shine it in eyes.'},
+ {k:'movement',t:'Crawl through creation',min:'10 min',prep:'light',where:'Indoors or out',need:['Two chairs','A big blanket'],do:['Drape the blanket over two chairs to make a dark tunnel.','Kneel at the open end where the light comes in.','Invite your toddler to crawl through the dark toward you and the light.'],say:['“It’s dark in there… here comes the light! God made light.”'],mind:'Some toddlers feel unsure in the dark. Lift the blanket a little, or go first.',faith:'God made light in the dark.',lv:['A short tunnel, one end open wide.','Make it longer, and add a cushion to climb over.'],rain:'Outdoors on a nice day? Walk together and point: sun, sky, shadows.'},
+ {k:'cog',t:'Sun and moon boxes',min:'10 min',prep:'some',where:'Indoors',need:['Two shoeboxes with a slot cut in each lid','A sun picture and a moon picture','4–6 picture cards (sun, stars, breakfast, bed)'],do:['Stick the sun on one box and the moon on the other.','Hand your toddler a card and name it: “Sun.”','Let them post it in either box. Then open the box and look together.'],say:['“You posted the stars. Stars come out at night.”'],mind:'At this age, posting is the fun. Matching comes later, so don’t correct the box they choose.',faith:'God made the day, and God made the night.',lv:['One box and just a few cards.','Two boxes. Talk about which one fits.']},
+ {k:'art',t:'My first stained glass',min:'10 min',prep:'light',where:'Indoors',need:['Clear sticky-back plastic','Big pre-cut tissue paper shapes','Tape'],do:['Tape the sheet to a window at your child’s height, sticky side out.','Put the big shapes in a bowl.','Let your child press pieces on wherever they like.'],say:['“You pressed the green one up high. The light is shining through it.”'],mind:'This is the same window activity your child will grow into at 18 months, just with bigger pieces.',faith:'God made light. Light helps us see colours.',lv:['A few large shapes.','Smaller shapes to pick up with finger and thumb.'],safe:'Stay close. Toddlers may still mouth paper.'},
+ {k:'science',t:'Shadow friends',min:'5 min',prep:'none',where:'Indoors',need:['A lamp','A favourite toy animal','A plain wall'],do:['Point the lamp at a plain wall in a dim room.','Help your toddler hold the toy between the lamp and the wall.','Watch the shadow grow as the toy gets closer to the lamp.'],say:['“Look, a big sheep on the wall! The toy is blocking the light.”'],mind:'Let them experiment with moving the toy. You don’t need to explain shadows yet.',faith:'God made light, and we can play in it.',lv:['You hold the toy; they point at the shadow.','They move the toy near and far.'],safe:'Keep lamps and cords out of reach; lamps get hot.'}],
+a18:[
+ {k:'sensory',t:'What’s inside the dark box?',min:'10–15 min',prep:'light',where:'Indoors',need:['A cardboard box with a hand-sized hole, or a pillowcase','3–4 familiar things with different textures (teddy, pinecone, brush, soft scarf)','A torch'],do:['Invite your child to reach inside without looking. Give them time to feel.','If they guess, say what they’re noticing rather than revealing the answer.','When they’re ready, shine the torch inside and look together.'],say:['“I wonder what’s inside. Is it soft, hard, smooth or bumpy?”','“We felt it in the dark. Let’s shine some light… now we can see!”'],mind:'Let your child explore at their own pace, and don’t reveal the objects too quickly. Describe what they’re doing instead of quizzing them.',faith:'In the beginning, God made light. Light helps us see the world He made.',lv:['Two very different things, like soft and hard.','Things that feel alike, like two balls of different sizes.'],swap:'No box? A pillowcase works. Turn the lights low and use the torch the same way.',ext:'Let your child hide something in the box and you guess.'},
+ {k:'movement',t:'Day and night freeze',min:'5–10 min',prep:'none',where:'Indoors or out',need:['Some space to move','Optional: a sun and moon drawn on paper'],do:['Say “Day!” and your child dances, jumps and stretches up to the sun.','Say “Night!” and they curl up on the floor, very still, as if asleep.','Take turns being the one who calls “Day” and “Night”.'],say:['“Day! Wake up, the sun is shining!”','“Night… shhh. God made the night for resting.”'],mind:'This is a great way to burn off energy before bed. End on “Night” and stay curled up together for a moment.',faith:'God called the light Day, and the darkness Night.',lv:['Hold their hands and do it together.','Add animals: hop like a rabbit in the day, curl like a cat at night.'],rain:'Outdoors: on a walk, find something in the sun and something in the shade.'},
+ {k:'cog',t:'Day and night sorting',min:'15 min',prep:'some',where:'Indoors',need:['Two mats: one with a sun, one with a moon (paper is fine)','Picture cards: sunshine, stars, breakfast, bedtime and more','Optional: child-safe tongs'],do:['Show a few familiar picture cards and place one on a mat.','Invite your child to sort the rest.','Listen to their reasons. Some things happen day and night.'],say:['“When we wake up, what do we see outside? The sun!”','“Where do you think the stars go?”'],mind:'Start with a few familiar pictures. Avoid turning it into a test with right-or-wrong questions.',faith:'God called the light Day and the darkness Night. God made both.',lv:['Four cards, sorted by hand.','More cards, picked up with tongs.'],swap:'No printer? Cut pictures from a magazine or draw simple ones together.'},
+ {k:'art',t:'Stained glass window',min:'15–20 min',prep:'light',where:'Indoors',need:['Clear sticky-back plastic','Coloured tissue paper or cellophane','A bowl'],do:['Tape the sheet to a window, sticky side facing your child.','Put the tissue paper in a bowl beside them.','Let your child choose and place each piece, then look at the light shining through.'],say:['“You picked a yellow piece. You’re putting it next to the blue one.”','“Look, the light is shining through your colours.”'],mind:'Focus on the process, not the finished window. Describe their choices and don’t rearrange their pieces.',faith:'God made light. Light helps us see all the colours He made.',lv:['Bigger, pre-torn pieces.','Let them cut their own pieces with child scissors.']},
+ {k:'science',t:'What lets light through?',min:'10 min',prep:'none',where:'Indoors',need:['A torch','A glass jar of water','A book','A thin scarf'],do:['In a dim room, let your child shine the torch at the wall.','Hold up each thing in turn: the jar, the book, the scarf.','Notice together: which lets the light through, and which blocks it?'],say:['“The light went right through the water! What about the book?”'],mind:'Let them predict before you try each one. Any guess is a good guess.',faith:'God made light. It shines in the dark.',lv:['Two things only: the jar and the book.','Let them find more things around the house to test.'],safe:'Use a plastic jar if you have one. Stay close with glass.'}]};
+
+const SIB='Playing with two? Set up the older child’s version first, then let the younger one watch, help or join in. Older children love being the helper.';
+const MOM={
+ a0:[['Morning','Open the curtains together: “Good morning, light.”'],['Bath time','Notice the light dancing on the water.'],['Bedtime','As you switch off the lamp: “Night is God’s too. Sleep well.”']],
+ a6:[['Morning','Open the curtains together: “Good morning, light.”'],['Mealtime','Let them see the light shine on a spoon or cup.'],['Bedtime','As you switch off the lamp: “Night is God’s too. Sleep well.”']],
+ a12:[['On a walk','Point to the sun, then find your shadows together.'],['Bath time','Notice the light dancing on the water.'],['Bedtime','Let them switch off the lamp: “God made the night for resting.”']],
+ a18:[['On a walk','Look for the sun and the shade. Which is warmer?'],['Getting dressed','“The sun is up. It’s daytime. God made the day.”'],['Bedtime','Look for the moon or stars from the window before sleep.']]};
+const PRAY={a0:'Hold your baby close by a window and pray softly. Your calm voice is what they take in.',a6:'Pray while your baby sits on your lap. Fold their hands in yours if they let you.',a12:'Keep it to two short lines. Your toddler may say “Amen” with you.',a18:'Say one line at a time and let your child repeat it. Raise your arms toward the light on “Thank you”.'};
+
+const SONG=['God made light, so warm and bright,','God made day and God made night.','Sun to wake us, stars to see,','God made you and God made me.','God made light, so warm and bright,','God made day and God made night.'];
+/* Nov 23: 0–18 months all use the same actions (the old 12–18 set). 18–36 is spelled out, with more to do. Never "same actions as…". */
+const BASE=['“God made light, so warm and bright”: arms up in a big circle for the sun.','“God made day and God made night”: open your arms wide on “day”, rest your cheek on your hands on “night”.','“Sun to wake us, stars to see”: stretch up tall, then wiggle your fingers like twinkling stars.','“God made you and God made me”: point gently to your child on “you” and to yourself on “me”.'];
+const ACTIONS={
+ a0:{tip:'Hold your baby on your lap facing you and do the actions for them. You can gently help their arms.',lines:BASE},
+ a6:{tip:'Do the actions facing your baby. Pause and let them clap or wiggle back.',lines:BASE},
+ a12:{tip:'Do the actions together. Your toddler may only catch one or two. That’s fine.',lines:BASE},
+ a18:{tip:'Do it standing up, with big movements. Take turns being the leader.',lines:['“God made light, so warm and bright”: arms up in a big circle for the sun, then sway side to side.','“God made day and God made night”: on “day”, jump up tall; on “night”, crouch down small and close your eyes.','“Sun to wake us, stars to see”: pop up and stretch on “wake us”, then wiggle your fingers high on “stars”.','“God made you and God made me”: point to each other on “you”, hug yourself on “me”.','Extra: switch the room light on at “day” and off at “night”. Let your child give the signal.']}};
+const SCR={
+ kjv:[['1–2','In the beginning God created the heaven and the earth. And the earth was without form, and void; and darkness was upon the face of the deep. And the Spirit of God moved upon the face of the waters.'],['3–4','And God said, Let there be light: and there was light. And God saw the light, that it was good: and God divided the light from the darkness.'],['5','And God called the light Day, and the darkness he called Night. And the evening and the morning were the first day.']],
+ web:[['1–2','In the beginning, God created the heavens and the earth. The earth was formless and empty. Darkness was on the surface of the deep and God’s Spirit was hovering over the surface of the waters.'],['3–4','God said, “Let there be light,” and there was light. God saw the light, and saw that it was good. God divided the light from the darkness.'],['5','God called the light “day”, and the darkness he called “night”. There was evening and there was morning, the first day.']]};
+const PSALM={kjv:'Thy word is a lamp unto my feet, and a light unto my path.',web:'Your word is a lamp to my feet, and a light for my path.'};
+/* 12 core stories (draft order) */
+const STORIES=[
+ {id:'light',t:'God made light',r:'Genesis 1:1–5',b:'Genesis',on:1},
+ {id:'noah',t:'Noah’s ark',r:'Genesis 6–9',b:'Genesis'},
+ {id:'moses',t:'Baby Moses',r:'Exodus 2',b:'Exodus'},
+ {id:'sea',t:'The Red Sea',r:'Exodus 14',b:'Exodus'},
+ {id:'manna',t:'Manna from heaven',r:'Exodus 16',b:'Exodus'},
+ {id:'jericho',t:'The walls of Jericho',r:'Joshua 6',b:'Joshua'},
+ {id:'shepherd',t:'The Lord is my Shepherd',r:'Psalm 23',b:'Psalms'},
+ {id:'david',t:'David and Goliath',r:'1 Samuel 17',b:'1 Samuel'},
+ {id:'daniel',t:'Daniel and the lions',r:'Daniel 6',b:'Daniel'},
+ {id:'jonah',t:'Jonah',r:'Jonah 1–3',b:'Jonah'},
+ {id:'storm',t:'Jesus calms the storm',r:'Mark 4',b:'Mark'},
+ {id:'sheep',t:'The lost sheep',r:'Luke 15',b:'Luke'}];
+const BOOKS=['Genesis','Exodus','Joshua','1 Samuel','Psalms','Daniel','Jonah','Mark','Luke'];
+
+/* ---------------- state ---------------- */
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+/* Neri icon set (Claude Design): 1.75px rounded strokes, 24px grid */
+const IC={home:'M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5.5h-5V20H5a1 1 0 0 1-1-1Z',discover:'M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18Z M15.5 8.5l-2 5-5 2 2-5Z',child:'M12 5a3.5 3.5 0 1 0 0 7a3.5 3.5 0 1 0 0-7Z M12 5c0-1.2.9-1.9 1.9-1.6 M5.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5',scripture:'M12 6.5C10 5 7 4.5 4 5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V5c-3-.5-6 0-8 1.5Z M12 6.5V19',sing:'M9 17.5a2.5 2.5 0 1 1-5 0a2.5 2.5 0 1 1 5 0Z M9 17.5V6l10-2v10.5 M19 14.5a2.5 2.5 0 1 1-5 0a2.5 2.5 0 1 1 5 0Z M9 9.5l10-2',play:'M4.5 13.5h6.5V20H4.5Z M13 13.5h6.5V20H13Z M8.75 4.5h6.5V11h-6.5Z',everyday:'M3 18.5h18 M7 18.5a5 5 0 0 1 10 0 M12 6.5v2 M5.6 10.1 7 11.5 M18.4 10.1 17 11.5 M3 14.5h1.5 M19.5 14.5H21',prayer:'M9 11.5h6V20H9Z M12 11.5V9.5 M12 3.5c1.5 1.7 2 2.8 2 3.6a2 2 0 0 1-4 0c0-.8.5-1.9 2-3.6Z',corner:'M5 4h10l4 4v12H5Z M15 4v4h4 M8.5 12h7 M8.5 16h4.5',keep:'M12 3.5 14.35 9.26 20.56 9.72 15.8 13.74 17.29 19.78 12 16.5 6.71 19.78 8.2 13.74 3.44 9.72 9.65 9.26Z',print:'M7 9V4h10v5 M7 17H5a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-2 M7 14h10v6H7Z',birthday:'M5 20v-7h14v7 M3.5 20h17 M5 16c1.2 1 2.3 1 3.5 0s2.3-1 3.5 0 2.3 1 3.5 0 2.3-1 3.5 0 M12 13v-3 M12 4.5c.9 1 1.2 1.7 1.2 2.2a1.2 1.2 0 0 1-2.4 0c0-.5.3-1.2 1.2-2.2Z',ages:'M4 16.5a1.5 1.5 0 1 1 0 3a1.5 1.5 0 1 1 0-3Z M8 13.5a1.5 1.5 0 1 1 0 3a1.5 1.5 0 1 1 0-3Z M12 10.5a1.5 1.5 0 1 1 0 3a1.5 1.5 0 1 1 0-3Z M16 7.5a1.5 1.5 0 1 1 0 3a1.5 1.5 0 1 1 0-3Z M20 4.5a1.5 1.5 0 1 1 0 3a1.5 1.5 0 1 1 0-3Z',share:'M12 15V4 M8 8l4-4 4 4 M5 12v7h14v-7',paper:'M12 8a4 4 0 1 0 0 8a4 4 0 1 0 0-8Z M12 2.5v2 M12 19.5v2 M2.5 12h2 M19.5 12h2 M5.3 5.3l1.4 1.4 M17.3 17.3l1.4 1.4 M5.3 18.7l1.4-1.4 M17.3 6.7l1.4-1.4',lamp:'M19 14.5A7.5 7.5 0 0 1 9.5 5a7.5 7.5 0 1 0 9.5 9.5Z',listen:'M8 5.5v13l10-6.5Z',back:'M15 5l-7 7 7 7',close:'M6 6l12 12 M18 6 6 18'};
+const ico=(n,sz=24)=>`<svg class="ic" viewBox="0 0 24 24" width="${sz}" height="${sz}" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${IC[n]}"/></svg>`;
+document.querySelectorAll('i[data-ic]').forEach(e=>{e.outerHTML=ico(e.dataset.ic,+(e.dataset.s||24))});
+/* story marks (Neri icon set), one per month */
+const MARK=["<g filter=\"url(#nWob)\"><circle cx=\"32\" cy=\"24\" r=\"11\" fill=\"#D4A548\"></circle><path d=\"M2 50q12-12 26-6t34-4v18H2Z\" fill=\"#8C9C7A\"></path><path d=\"M2 56q16-8 30-2t30-3v7H2Z\" fill=\"#D9A796\"></path></g>", "<g filter=\"url(#nWob)\"><path d=\"M23 28l9-7 9 7Z\" fill=\"#8C9C7A\"></path><path d=\"M24 28h16v10H24Z\" fill=\"#D4A548\"></path><path d=\"M10 37h44l-6 12H16Z\" fill=\"#B5583A\"></path><path d=\"M2 50q7-4 15 0t15 0 15 0 15 0v8H2Z\" fill=\"#5E7A93\"></path><path d=\"M46 14q4-3 8 0\" fill=\"none\" stroke=\"#D9A796\" stroke-width=\"3\" stroke-linecap=\"round\"></path></g>", "<g filter=\"url(#nWob)\"><path d=\"M8 46V22h2.5v24Z M13 46V28h2.5v18Z M50 46V18h2.5v28Z M55 46V26h2.5v20Z\" fill=\"#8C9C7A\"></path><path d=\"M22 34q10-9 20 0Z\" fill=\"#D9A796\"></path><path d=\"M16 34h32q-2 13-16 13T16 34Z\" fill=\"#D4A548\"></path><path d=\"M2 48q7-4 15 0t15 0 15 0 15 0v10H2Z\" fill=\"#5E7A93\"></path></g>", "<g filter=\"url(#nWob)\"><path d=\"M27 58l3-40h4l3 40Z\" fill=\"#D4A548\"></path><path d=\"M2 58V16q6-6 11 0 5-6 10 0v42Z\" fill=\"#5E7A93\"></path><path d=\"M62 58V16q-6-6-11 0-5-6-10 0v42Z\" fill=\"#5E7A93\"></path><circle cx=\"32\" cy=\"10\" r=\"3\" fill=\"#D9A796\"></circle></g>", "<g filter=\"url(#nWob)\"><circle cx=\"20\" cy=\"12\" r=\"3\" fill=\"#D4A548\"></circle><circle cx=\"34\" cy=\"8\" r=\"2.5\" fill=\"#D9A796\"></circle><circle cx=\"46\" cy=\"16\" r=\"3\" fill=\"#D4A548\"></circle><circle cx=\"27\" cy=\"24\" r=\"2.5\" fill=\"#D4A548\"></circle><circle cx=\"40\" cy=\"29\" r=\"3\" fill=\"#D9A796\"></circle><path d=\"M16 42h32l-4 14H20Z\" fill=\"#B5583A\"></path><path d=\"M2 56h60v4H2Z\" fill=\"#8C9C7A\"></path></g>", "<g filter=\"url(#nWob)\"><path d=\"M14 20l22-7v16Z\" fill=\"#D4A548\"></path><circle cx=\"38\" cy=\"21\" r=\"6\" fill=\"#D4A548\"></circle><path d=\"M6 58V36h6v-4h6v4h6v-4h6v4h6v-4h6v4h6v-4h6v4h4v22Z\" fill=\"#B5583A\"></path><path d=\"M14 44h10v6H14Z M30 44h10v6H30Z M44 50h8v8h-8Z\" fill=\"#D9A796\"></path></g>", "<g filter=\"url(#nWob)\"><path d=\"M2 48q16-10 32-4t28-2v16H2Z\" fill=\"#8C9C7A\"></path><path d=\"M38 54V20a8 8 0 0 0-16 0v3\" fill=\"none\" stroke=\"#B5583A\" stroke-width=\"4.5\" stroke-linecap=\"round\"></path><path d=\"M8 32q6-3 12 0\" fill=\"none\" stroke=\"#5E7A93\" stroke-width=\"3\" stroke-linecap=\"round\"></path><circle cx=\"52\" cy=\"14\" r=\"5\" fill=\"#D4A548\"></circle></g>", "<g filter=\"url(#nWob)\"><ellipse cx=\"18\" cy=\"48\" rx=\"10\" ry=\"7\" fill=\"#8C9C7A\"></ellipse><ellipse cx=\"38\" cy=\"50\" rx=\"11\" ry=\"6.5\" fill=\"#B5583A\"></ellipse><ellipse cx=\"52\" cy=\"44\" rx=\"7\" ry=\"5.5\" fill=\"#5E7A93\"></ellipse><ellipse cx=\"28\" cy=\"38\" rx=\"8\" ry=\"6\" fill=\"#D4A548\"></ellipse><ellipse cx=\"43\" cy=\"36\" rx=\"6.5\" ry=\"5\" fill=\"#D9A796\"></ellipse><path d=\"M14 18q18 14 36 0\" fill=\"none\" stroke=\"#362C25\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-dasharray=\"3 4\"></path></g>", "<g filter=\"url(#nWob)\"><path d=\"M52 6a8 8 0 1 0 7 12 6.5 6.5 0 0 1-7-12Z\" fill=\"#5E7A93\"></path><circle cx=\"30\" cy=\"36\" r=\"17\" fill=\"#D4A548\"></circle><circle cx=\"30\" cy=\"38\" r=\"10\" fill=\"#D9A796\"></circle><circle cx=\"26.5\" cy=\"36\" r=\"1.2\" fill=\"#362C25\"></circle><circle cx=\"33.5\" cy=\"36\" r=\"1.2\" fill=\"#362C25\"></circle><path d=\"M2 58h60v2H2Z\" fill=\"#8C9C7A\"></path></g>", "<g filter=\"url(#nWob)\"><path d=\"M30 16v-6 M24 12l-3-4 M36 12l3-4\" fill=\"none\" stroke=\"#5E7A93\" stroke-width=\"2.5\" stroke-linecap=\"round\"></path><path d=\"M6 36q2-16 24-16 18 0 22 12l8-6-2 12 4 10-10-6q-6 8-22 8T6 36Z\" fill=\"#5E7A93\"></path><circle cx=\"18\" cy=\"31\" r=\"1.3\" fill=\"#FBF8F2\"></circle><path d=\"M4 56q7-4 14 0t14 0 14 0 14 0\" fill=\"none\" stroke=\"#5E7A93\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-dasharray=\"5 7\"></path></g>", "<g filter=\"url(#nWob)\"><path d=\"M44 6l1.6 4 4.4.3-3.4 2.8 1.1 4.3L44 15l-3.7 2.4 1.1-4.3L38 10.3l4.4-.3Z\" fill=\"#D4A548\"></path><path d=\"M31 18v20h-14Z\" fill=\"#D9A796\"></path><path d=\"M33 22v16h10Z\" fill=\"#D4A548\"></path><path d=\"M12 40h40l-5 9H17Z\" fill=\"#B5583A\"></path><path d=\"M2 50q7-3 15 0t15 0 15 0 15 0v8H2Z\" fill=\"#5E7A93\"></path></g>", "<g filter=\"url(#nWob)\"><path d=\"M2 52q18-8 34-2t26-2v12H2Z\" fill=\"#8C9C7A\"></path><path d=\"M4 18q10-10 16 0t14 4\" fill=\"none\" stroke=\"#B5583A\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-dasharray=\"5 7\"></path><circle cx=\"38\" cy=\"38\" r=\"7\" fill=\"#FFFDF8\"></circle><circle cx=\"46\" cy=\"36\" r=\"7\" fill=\"#FFFDF8\"></circle><circle cx=\"42\" cy=\"31\" r=\"6\" fill=\"#FFFDF8\"></circle><ellipse cx=\"53\" cy=\"31\" rx=\"4\" ry=\"3.4\" fill=\"#362C25\"></ellipse><path d=\"M38 44v6 M46 44v6\" stroke=\"#362C25\" stroke-width=\"2.2\" stroke-linecap=\"round\"></path><circle cx=\"50\" cy=\"12\" r=\"4\" fill=\"#D4A548\"></circle></g>"];
+const markSVG=(i)=>`<svg viewBox="0 0 64 64" aria-hidden="true">${MARK[i]}</svg>`;
+
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const FRESH=()=>({kids:[],email:'',started:null,active:0,saved:[],done:[],preview:false,lastLit:null,trans:'kjv',theme:'paper',view:null,dAge:null,dCat:'all',fNo:false,fQ:false,fD:false,fO:false});
+let S=FRESH();
+try{Object.assign(S,JSON.parse(localStorage.getItem('neri6')||'{}'))}catch(e){}
+const save=()=>{try{localStorage.setItem('neri6',JSON.stringify(S))}catch(e){}};
+const today=new Date();
+function months(b){const d=new Date(b+'T12:00');let m=(today.getFullYear()-d.getFullYear())*12+today.getMonth()-d.getMonth();if(today.getDate()<d.getDate())m--;return Math.max(0,m)}
+const groupOf=m=>m<6?'a0':m<12?'a6':m<18?'a12':'a18';
+const ageText=m=>m<24?`${m} month${m===1?'':'s'}`:`${Math.floor(m/12)} years${m%12?`, ${m%12} month${m%12===1?'':'s'}`:''}`;
+const kid=()=>S.kids[S.active]||S.kids[0];
+const kidGroup=k=>groupOf(months(k.birth));
+const viewAge=()=>S.view||kidGroup(kid());
+const names=()=>{const n=S.kids.map(k=>k.name);return n.length<2?n[0]:n.slice(0,-1).join(', ')+' and '+n[n.length-1]};
+function bdaySoon(k){const d=new Date(k.birth+'T12:00');const t=new Date(today.getFullYear(),d.getMonth(),d.getDate(),12);const diff=Math.round((t-today)/864e5);return diff>=-3&&diff<=7?diff:null}
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('on'),2600)}
+
+/* ---------------- colours ---------------- */
+const HUE={blush:'#D9A796',ochre:'#D4A548',sage:'#8C9C7A',denim:'#5E7A93',clay:'#B5583A',plum:'#8C6A8A'};
+/* Ages use warm walnut tints (light → dark as the child grows), so they never share a colour with a kind of play. */
+const AGES=[
+ {id:'a0',label:'0–6 months',short:'0–6 m',v:'--age0'},
+ {id:'a6',label:'6–12 months',short:'6–12 m',v:'--age1'},
+ {id:'a12',label:'12–18 months',short:'12–18 m',v:'--age2'},
+ {id:'a18',label:'18–36 months',short:'18–36 m',v:'--age3'}];
+const adot=a=>`<span class="adot" style="background:var(${AGES.find(x=>x.id===a).v})"></span>`;
+const CATS={sensory:{n:'Sensory',c:'blush'},movement:{n:'Movement',c:'clay'},cog:{n:'Cognitive',c:'denim'},science:{n:'Science',c:'sage'},art:{n:'Art',c:'ochre'},music:{n:'Music & words',c:'plum'}};
+const PREP={none:'No prep',light:'2-min prep',some:'Some prep'};
+/* one symbol per kind of play, always the same */
+const ICON={
+ sensory:'<path d="M8 13V6.5a1.5 1.5 0 0 1 3 0V11m0-.5V4.5a1.5 1.5 0 0 1 3 0V11m0-.5V6a1.5 1.5 0 0 1 3 0v7.5c0 4-2.6 7-6.2 7-2.4 0-3.8-1.2-5.2-3.3L3.8 14a1.5 1.5 0 0 1 2.5-1.7L8 14.5"/>',
+ movement:'<circle cx="13" cy="4.5" r="2"/><path d="M9 21l2.5-5.5L14 17v4M11.5 15.5l1-5.5M7 11l3-2.5 4 1.5 2 3 3 .5M12.5 10l2.5-1"/>',
+ cog:'<rect x="3.5" y="3.5" width="7" height="7" rx="1"/><circle cx="17" cy="7" r="3.5"/><path d="M7 13.5l3.8 6.5H3.2z"/><rect x="13.5" y="13.5" width="7" height="7" rx="3.5"/>',
+ science:'<circle cx="10" cy="10" r="6"/><path d="M14.5 14.5L20.5 20.5M10 7v3h3"/>',
+ art:'<path d="M14.5 3.5l6 6-8.5 8.5-6-6z"/><path d="M6 12.5c-2.2.8-2.4 3.8-3 6.5 2.8-.5 5.6-.7 6.8-2.8"/>',
+ music:'<path d="M9 18V6l10-2.5V16"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/>'};
+function sym(k){const c=CATS[k].c;return `<span class="sym" style="background:var(--${c}-soft);color:var(--${c}-deep)" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${ICON[k]}</svg></span>`}
+
+/* ---------------- pictures with a calm fallback ---------------- */
+function fallback(key){const c=key==='hero'?'denim':(CATS[(key.split('-')[1])]||{c:'ochre'}).c;
+ return `<svg class="fb" viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="160" height="120" fill="var(--sunk)"/><path d="M0 92q40-14 80-4t80-6v38H0z" fill="${HUE.sage}" opacity=".55"/><path d="M0 104q50-12 100-2t60-4v22H0z" fill="${HUE.clay}" opacity=".45"/><circle cx="${key==='hero'?116:80}" cy="48" r="18" fill="${key==='hero'?HUE.ochre:(HUE[c]||HUE.ochre)}"/>${key==='hero'?'<path d="M44 30a12 12 0 1 0 12 15 9.5 9.5 0 1 1-12-15z" fill="#F5F0E6"/>':''}</svg>`}
+function pic(key,cls='',alt=''){const id=IMG[key];return `<div class="pic ${cls}">${fallback(key)}${id?`<img src="${KREA+id}.png" alt="${esc(alt)}" loading="lazy" onerror="this.parentNode.classList.add('nf')">`:''}</div>`}
+$$('[data-img]').forEach(el=>{el.outerHTML=pic(el.dataset.img,el.className.replace('pic','').trim(),'Night sky with a moon on one side, morning sun over rolling fields on the other')});
+
+/* ---------------- navigation ---------------- */
+let cur='home',prev='home';
+function show(id){
+ if(!S.kids.length)id='welcome';
+ if(id==='guide'&&cur!=='guide')prev=cur;
+ cur=id;$$('.screen').forEach(s=>s.classList.toggle('on',s.id==='s-'+id));
+ const m=$('#s-'+id+' main');if(m)m.scrollTop=0;
+ const tab=id==='guide'?(prev==='discover'?'discover':'home'):id;
+ $$('#tabbar [data-tab]').forEach(b=>{const on=b.dataset.tab===tab;b.classList.toggle('on',on);b.setAttribute('aria-current',on?'page':'false')});
+ $('#tabbar').classList.toggle('hide',id==='welcome');
+ ({home:renderHome,guide:renderGuide,discover:renderDiscover,journey:renderJourney,profile:renderProfile}[id]||(()=>{}))();
+ if(location.hash!=='#'+id)history.replaceState(null,'','#'+id);
+ if(id!=='guide'){try{stopRead();stopTune()}catch(e){}}
+}
+$('#tabbar').onclick=e=>{const b=e.target.closest('[data-tab]');if(b)show(b.dataset.tab)};
+document.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g){if(g.dataset.age!==undefined){S.view=g.dataset.age===kidGroup(kid())?null:g.dataset.age;save()}closeSheet(true);show(g.dataset.go)}
+ if(e.target.closest('[data-back]'))show(prev||'home')});
+function applyTheme(){document.documentElement.dataset.theme=S.theme==='lamplight'?'lamplight':'';$$('[data-theme-toggle]').forEach(b=>b.innerHTML=ico(S.theme==='lamplight'?'paper':'lamp',20));$$('#themeSeg button').forEach(b=>b.classList.toggle('on',b.dataset.th===S.theme))}
+$$('[data-theme-toggle]').forEach(b=>b.onclick=()=>{S.theme=S.theme==='lamplight'?'paper':'lamplight';save();applyTheme()});
+
+/* ---------------- welcome ---------------- */
+$('#startBtn').onclick=()=>{const em=$('#kEmail').value.trim(),n=$('#kName').value.trim(),b=$('#kBirth').value;
+ if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){$('#startErr').textContent='Add an email so both parents can sign in.';return}
+ if(!n||!b){$('#startErr').textContent='Add your child’s name and birthday.';return}
+ if(new Date(b)>today){$('#startErr').textContent='That birthday is in the future.';return}
+ S.email=em;S.kids=[{name:n,birth:b}];S.active=0;S.started=today.toISOString().slice(0,10);save();show('home');toast('Account created. Check your email for the sign-in link.')};
+
+/* ---------------- home ---------------- */
+function kidChips(el){el.innerHTML=S.kids.length>1?S.kids.map((k,i)=>`<button class="chip ${i===S.active?'on':''}" data-kid="${i}" aria-pressed="${i===S.active}">${adot(kidGroup(k))}${esc(k.name)}</button>`).join(''):''}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-kid]');if(!b)return;S.active=+b.dataset.kid;S.view=null;save();show(cur)});
+function renderHome(){const k=kid(),m=months(k.birth),g=AGES.find(a=>a.id===kidGroup(k));
+ kidChips($('#homeKids'));
+ const h=today.getHours();$('#hello').textContent=h<12?'Good morning':h<18?'Good afternoon':'Good evening';
+ $('#helloSub').textContent=`Your family’s discipleship journey with ${names()}`;
+ $('#homeFor').textContent=`Play ideas for ${k.name}`;
+ $('#homeAge').innerHTML=`${adot(g.id)}${ageText(m)} · ${g.label}`;
+ const bd=S.kids.map(x=>[x,bdaySoon(x)]).filter(([,d])=>d!==null);
+ $('#bday').innerHTML=bd.map(([x,d])=>`<div class="bday"><span style="color:var(--blush-deep)">${ico('birthday',22)}</span><div><b>${d===0?`Happy birthday, ${esc(x.name)}`:d>0?`${esc(x.name)}’s birthday is in ${d} day${d>1?'s':''}`:`${esc(x.name)} just had a birthday`} <span class="star"></span></b><p class="small" style="margin:6px 0 0">A blessing to say over them: “The Lord bless thee, and keep thee: the Lord make his face shine upon thee.” <span class="muted">Numbers 6:24–25</span></p></div></div>`).join('')}
+
+/* ---------------- guide ---------------- */
+function renderGuide(){const k=kid(),a=viewAge(),g=AGES.find(x=>x.id===a),own=a===kidGroup(k);
+ $('#gMeta').innerHTML=`Genesis 1:1–5 · ${own?`For ${esc(k.name)}, ${ageText(months(k.birth))}`:`Showing ${g.label}`}`;
+ $('#ageSwitch').innerHTML=ico('ages',18)+(own?'Show activities for another age':`Back to ${esc(k.name)}’s age`);
+ $('#ageChips').innerHTML=AGES.map(x=>`<button class="chip ${x.id===a?'on':''}" data-age="${x.id}">${adot(x.id)}${x.label}</button>`).join('');
+ $('#sibNote').innerHTML=S.kids.length>1?`<p class="small" style="background:var(--sage-soft);border-radius:var(--r-sm);padding:10px 12px;margin:6px 0 0">Playing with ${esc(names())}? Each activity shows an easier and a harder version, so you can do the same activity together.</p>`:'';
+ const older=a==='a18';
+ $('#scrTip').textContent=older?'From about 18 months, little ones can sit for more. Try the whole passage this week, one short part at a time.':'For little ones, the memory verse is enough. Say it often this week.';
+ $('#dParts').open=older;
+ renderParts();
+ $('#acts').innerHTML=ACT[a].map((x,i)=>actTile(a,i,x,'g')).join('');
+ $('#moments').innerHTML=MOM[a].map(([t,s],i)=>`<li><span>${i+1}</span><div><b>${t}</b>${esc(s)}</div></li>`).join('');
+ $('#prayer').innerHTML=prayerLines(k.name).map(esc).join('<br>');
+ $('#prayHow').textContent=PRAY[a];
+ renderDone();
+}
+const prayerLines=n=>['Dear God,','Thank you for making light.','Thank you for the sun in the day','And the stars at night.',`Thank you for making ${n}.`,'Amen.'];
+function renderDone(){const d=S.done.includes('light');const b=$('#doneBox');b.classList.toggle('done',d);
+ b.innerHTML=d?`<span class="star" style="width:18px;height:18px"></span><p><b style="display:block;font:500 17px var(--serif)">You walked this story together</b>A new pair of footsteps is lit on your journey.</p><button class="btn sm ink" data-go="journey">See it</button>`
+ :`<p>Played this story together this month?</p><button class="btn sm" id="markDone">✓ We played this</button>`;
+ const m=$('#markDone');if(m)m.onclick=()=>{S.done=[...new Set([...S.done,'light'])];S.lastLit='light';save();renderDone();toast('A new step lit up on your journey')}}
+function actTile(a,i,x,src){const c=CATS[x.k];return `<button class="act" data-open="${a}:${i}:${src}">${sym(x.k)}<span><span class="cat">${c.n}</span><span class="nm">${esc(x.t)}${src==='d'?' · <i>God made light</i>':''}</span><span class="tags"><span class="tag">${x.min}</span><span class="tag">${PREP[x.prep]}</span>${S.saved.includes(a+':'+i)?'<span class="tag">★ Saved</span>':''}</span></span></button>`}
+function renderParts(){$('#parts').innerHTML=SCR[S.trans].map(([v,t],i)=>`<div class="part"><div class="row" style="justify-content:space-between;gap:8px"><b>PART ${i+1} · VERSES ${v}</b>${S.trans==='kjv'?`<button class="chip" data-read="p${i+1}" style="min-height:36px">▶ Listen</button>`:''}</div><p>${esc(t)}</p></div>`).join('');$$('#trans button,#transSeg button').forEach(b=>b.classList.toggle('on',b.dataset.t===S.trans))}
+$('#ageSwitch').onclick=()=>{const own=viewAge()===kidGroup(kid());if(!own){S.view=null;save();renderGuide();$('#ageChips').hidden=true;return}$('#ageChips').hidden=!$('#ageChips').hidden};
+$('#ageChips').onclick=e=>{const b=e.target.closest('[data-age]');if(!b)return;S.view=b.dataset.age===kidGroup(kid())?null:b.dataset.age;save();renderGuide()};
+$('#trans').onclick=$('#transSeg').onclick=e=>{const b=e.target.closest('[data-t]');if(b){S.trans=b.dataset.t;save();renderParts()}};
+document.addEventListener('click',e=>{const b=e.target.closest('[data-open]');if(!b)return;const[a,i,src]=b.dataset.open.split(':');openAct(a,+i,src)});
+
+/* Listen: softer recorded voice (ElevenLabs "Sarah" via Krea); device voice only as a fallback */
+let player=null,playingBtn=null;
+function stopRead(){if(player){player.pause();player=null}if(playingBtn){playingBtn.innerHTML=playingBtn.dataset.label;playingBtn=null}try{speechSynthesis.cancel()}catch(e){}}
+function readAloud(key,btn,fallbackText){
+ if(playingBtn===btn){stopRead();return}
+ stopRead();stopTune();btn.dataset.label=btn.innerHTML;playingBtn=btn;btn.innerHTML='■ Stop';
+ const au=new Audio(VOICE+READ[key]+'.mp3');player=au;
+ au.onended=()=>{if(player===au)stopRead()};
+ au.play().catch(()=>{try{const u=new SpeechSynthesisUtterance(fallbackText);u.rate=.8;u.pitch=1.05;u.onend=stopRead;speechSynthesis.speak(u)}catch(e){stopRead();toast('Audio isn’t available here')}});
+}
+$('#listen').onclick=()=>readAloud('verse',$('#listen'),'And God said, Let there be light: and there was light.');
+$('#parts').onclick=e=>{const b=e.target.closest('[data-read]');if(!b)return;const i=+b.dataset.read.slice(1)-1;readAloud(b.dataset.read,b,SCR.kjv[i][1])};
+
+/* Sing */
+const NOTES={C:261.63,D:293.66,E:329.63,F:349.23,G:392,A:440};
+const TUNE='CCGGAAG-FFEEDDC-GGFFEED-GGFFEED-CCGGAAG-FFEEDDC';
+let tuneURL=null,tune=null;
+function makeTune(){const sr=22050,beat=.5,rest=.25;let dur=.3;for(const n of TUNE)dur+=n==='-'?rest:beat;dur+=1.2;
+ const N=Math.floor(sr*dur),pcm=new Float32Array(N);let t=.15;
+ for(const n of TUNE){if(n==='-'){t+=rest;continue}const f=NOTES[n],st=Math.floor(t*sr),len=Math.floor(1.4*sr);
+  for(let i=0;i<len&&st+i<N;i++){const x=i/sr,env=Math.min(1,x*120)*Math.exp(-x*3.2);pcm[st+i]+=env*(.55*Math.sin(2*Math.PI*f*x)+.22*Math.sin(4*Math.PI*f*x)+.08*Math.sin(6*Math.PI*f*x)+.12*Math.sin(Math.PI*f*x))}
+  t+=beat}
+ const buf=new ArrayBuffer(44+N*2),v=new DataView(buf),w=(o,s)=>{for(let i=0;i<s.length;i++)v.setUint8(o+i,s.charCodeAt(i))};
+ w(0,'RIFF');v.setUint32(4,36+N*2,true);w(8,'WAVE');w(12,'fmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,sr,true);v.setUint32(28,sr*2,true);v.setUint16(32,2,true);v.setUint16(34,16,true);w(36,'data');v.setUint32(40,N*2,true);
+ for(let i=0;i<N;i++)v.setInt16(44+i*2,Math.max(-1,Math.min(1,pcm[i]*.5))*32767,true);
+ return URL.createObjectURL(new Blob([buf],{type:'audio/wav'}))}
+function stopTune(){if(tune){tune.pause();tune=null}setPlay()}
+function playTune(){if(tune){stopTune();return}stopRead();try{tuneURL=tuneURL||makeTune();tune=new Audio(tuneURL);tune.onended=()=>{tune=null;setPlay()};tune.play().then(setPlay).catch(()=>{tune=null;setPlay();toast('Sound isn’t available here')})}catch(e){toast('Sound isn’t available here')}}
+$('#playSong').onclick=playTune;
+function setPlay(){const on=!!tune;$$('[data-tune]').forEach(b=>{b.innerHTML=on?'<svg width="20" height="20" viewBox="0 0 24 24"><path d="M7 5h4v14H7zM13 5h4v14h-4z" fill="currentColor"/></svg>':'<svg width="20" height="20" viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z" fill="currentColor"/></svg>';b.setAttribute('aria-label',on?'Stop the tune':'Play the tune')})}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-tune]');if(b&&b.id!=='playSong')playTune()});
+const actionsHTML=a=>{const A=ACTIONS[a];return `<div class="corner"><b>Actions · ${AGES.find(x=>x.id===a).label}</b><p style="margin:2px 0 4px">${esc(A.tip)}</p><ol>${A.lines.map(l=>`<li>${esc(l)}</li>`).join('')}</ol></div>`};
+$('#lyricsBtn').onclick=()=>{const a=viewAge();openSheet(`<div class="ptop"><p class="mast">Sing · To “Twinkle, Twinkle”</p><button class="round" data-close aria-label="Close">${ico('close',20)}</button></div><div class="sing" style="margin:4px 0 12px"><button class="playbtn" data-tune aria-label="Play the tune"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z" fill="currentColor"/></svg></button><div><b>God made light</b><span class="small">Play the tune, then sing along</span></div></div><p style="font:19px/1.7 var(--serif);margin:12px 0">${SONG.map(esc).join('<br>')}</p>${actionsHTML(a)}<p class="note" style="margin-top:10px">An action video is planned.</p>`);setPlay()};
+
+/* ---------------- activity sheet ---------------- */
+function openAct(a,i,src){const x=ACT[a][i],c=CATS[x.k],g=AGES.find(y=>y.id===a),key=a+':'+i,sv=S.saved.includes(key);
+ const kidsAt=S.kids.length>1?S.kids.map(k=>[k,kidGroup(k)]):[];
+ const fromD=src==='d',steps=x.k==='sensory'&&DIAG[a]&&STEPIMG[a];
+ const guideLink=`<div class="from">${pic('hero','th','')}<p><span class="mast">Part of this week’s guide</span><b>God made light</b>Genesis 1:1–5 · Scripture, song, prayer and more ideas</p></div><button class="btn ink wide" data-go="guide" data-age="${a}" style="margin-top:8px">See this week’s guide</button>`;
+ openSheet(`<div class="ptop"><p class="mast" style="display:flex;align-items:center;gap:8px"><span class="dot" style="background:${HUE[c.c]}"></span>${c.n} · ${g.label}</p><button class="round" data-close aria-label="Close">${ico('close',20)}</button></div>
+ ${pic(a+'-'+x.k,'hero tall',x.t)}
+ <h2 id="pTitle" style="font-size:27px;margin:14px 0 6px">${esc(x.t)}</h2>
+ <div class="tags" style="display:flex;gap:6px;flex-wrap:wrap"><span class="tag">${x.min}</span><span class="tag">${PREP[x.prep]}</span><span class="tag">${x.where}</span></div>
+ ${fromD?`<p class="small muted" style="margin:10px 0 0">From <b style="color:var(--ink)">God made light</b> (Genesis 1:1–5). <button class="link" data-go="guide" data-age="${a}" style="min-height:32px">See the full guide →</button></p>`:''}
+ ${steps?`<div class="steph"><p class="label">Step by step</p><span class="note">Swipe · ${x.do.length} steps</span></div><div class="steps">${x.do.map((d,i)=>`<figure class="stc">${stepPic(a,i)}<figcaption><span class="sn">${i+1}</span><b>${esc(DIAG[a][i].l)}</b><span>${esc(d)}</span></figcaption></figure>`).join('')}</div>`:''}
+ <div class="ws"><div>
+  <div class="wr"><b>Need</b><ul>${x.need.map(n=>`<li>${esc(n)}</li>`).join('')}</ul></div>
+  ${steps?'':`<div class="wr"><b>Do</b><ol>${x.do.map(n=>`<li>${esc(n)}</li>`).join('')}</ol></div>`}
+  <div class="wr"><b>Say</b><div>${x.say.map(s=>`<p class="say">${esc(s)}</p>`).join('')}</div></div>
+  <div class="wr"><b>Mind</b><div class="corner"><b>Parent’s Corner</b>${esc(x.mind)}</div></div>
+  <div class="wr"><b>Faith</b><p class="faith">“${esc(x.faith)}”</p></div>
+ </div></div>
+ ${x.swap?`<div class="swap"><b>Less prep:</b> ${esc(x.swap)}</div>`:''}
+ ${x.rain?`<div class="swap"><b>Another way:</b> ${esc(x.rain)}</div>`:''}
+ <p class="label">Make it easier or harder</p>
+ <div class="lv"><div><b>Just starting</b>${esc(x.lv[0])}</div><div><b>Ready for more</b>${esc(x.lv[1])}</div></div>
+ ${kidsAt.length?`<div class="corner" style="margin-top:10px"><b>Playing with more than one</b>${esc(SIB)}${kidsAt.filter(([k,gg])=>gg!==a).map(([k,gg])=>{const j=ACT[gg].findIndex(y=>y.k===x.k);return j<0?'':`<br><button class="link" data-open="${gg}:${j}:${src}" style="min-height:40px">${esc(k.name)}’s version: ${esc(ACT[gg][j].t)} →</button>`}).join('')}</div>`:''}
+ ${x.ext?`<p class="label">Extend the play</p><p>${esc(x.ext)}</p>`:''}
+ ${x.safe?`<div class="safe"><b>Safety:</b> ${esc(x.safe)}</div>`:''}
+ <div class="row" style="margin-top:18px"><button class="btn ${sv?'':'ink'}" data-save="${key}">${sv?'★ Saved to favourites':'Save to favourites'}</button></div>
+ ${fromD?guideLink:''}
+ ${a!=='a18'?'<p class="note" style="margin-top:12px">Draft activity for Esther and Jamie to review.</p>':''}`)}
+function openSheet(h){$('#panel').innerHTML='<div class="grab"></div>'+h;$('#sheet').classList.add('on');$('#panel').scrollTop=0;const c=$('#panel [data-close]');if(c)c.focus()}
+function closeSheet(quiet){if(!$('#sheet').classList.contains('on'))return;$('#sheet').classList.remove('on');if(quiet)return;if(cur==='guide')renderGuide();if(cur==='discover')renderDiscover()}
+$('#sheet').onclick=e=>{if(e.target.id==='sheet'||e.target.closest('[data-close]'))closeSheet();const s=e.target.closest('[data-save]');if(s){const k=s.dataset.save;S.saved=S.saved.includes(k)?S.saved.filter(x=>x!==k):[...S.saved,k];save();const on=S.saved.includes(k);s.textContent=on?'★ Saved to favourites':'Save to favourites';s.classList.toggle('ink',!on);toast(on?'Saved. Find it on your Journey (★).':'Removed from favourites')}};
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#sheet').classList.contains('on'))closeSheet()});
+
+/* ---------------- print: the real guide, not the screen ---------------- */
+/* Step diagrams for the sensory activities: flat cut-paper shapes, brand hues only, no outlines, faceless people.
+   Each panel is 240×160. Panel i matches Do-step i. */
+const DP={raised:'#FBF8F2',sunk:'#ECE5D8',ink:'#362C25',muted:'#8A7A62',blush:'#D9A796',blushS:'#F3E1D9',ochre:'#D4A548',ochreS:'#F4E6C4',ochreD:'#7A5A16',sage:'#8C9C7A',sageS:'#E2E6D6',denim:'#5E7A93',denimS:'#DCE4EA',denimD:'#3A5068',clay:'#B5583A',claySoft:'#EFD8CC',skin:'#E2B49E',skinB:'#EAC5B3',hair:'#6B5240'};
+const dpRoom=(dark)=>dark?`<rect width="240" height="160" fill="${DP.denimD}"/><rect y="124" width="240" height="36" fill="#2F4256"/>`:`<rect width="240" height="160" fill="${DP.raised}"/><rect y="124" width="240" height="36" fill="${DP.sunk}"/>`;
+const dpWin=(x,y,w,h)=>`<rect x="${x-3}" y="${y-3}" width="${w+6}" height="${h+6}" rx="3" fill="#E9E0CF"/><rect x="${x}" y="${y}" width="${w/2-1.5}" height="${h/2-1.5}" fill="${DP.denimS}"/><rect x="${x+w/2+1.5}" y="${y}" width="${w/2-1.5}" height="${h/2-1.5}" fill="${DP.denimS}"/><rect x="${x}" y="${y+h/2+1.5}" width="${w/2-1.5}" height="${h/2-1.5}" fill="${DP.denimS}"/><rect x="${x+w/2+1.5}" y="${y+h/2+1.5}" width="${w/2-1.5}" height="${h/2-1.5}" fill="${DP.denimS}"/><circle cx="${x+w*.74}" cy="${y+h*.22}" r="${w*.1}" fill="${DP.ochre}"/><rect x="${x-6}" y="${y+h+3}" width="${w+12}" height="5" rx="2" fill="#E0D4BE"/>`;
+const dpRays=(pts)=>`<polygon points="${pts}" fill="${DP.ochre}" opacity=".26"/>`;
+/* baby lying on back, head at (x,y), body to the right */
+const dpBabyLie=(x,y)=>`<ellipse cx="${x+26}" cy="${y+2}" rx="21" ry="9" fill="${DP.sage}"/><ellipse cx="${x+50}" cy="${y+3}" rx="8" ry="6" fill="${DP.sage}"/><ellipse cx="${x+22}" cy="${y-7}" rx="7" ry="3.5" fill="${DP.skinB}" transform="rotate(-25 ${x+22} ${y-7})"/><circle cx="${x}" cy="${y}" r="10.5" fill="${DP.skinB}"/><path d="M${x-9} ${y-4}a10 10 0 0 1 14 -7" fill="none" stroke="${DP.hair}" stroke-width="3" stroke-linecap="round"/>`;
+/* sitting baby facing left; (x,y) = seat on floor */
+const dpBabySit=(x,y,col=DP.ochre)=>`<ellipse cx="${x-12}" cy="${y-5}" rx="17" ry="6" fill="${col}"/><path d="M${x-13} ${y-4}c-1-18 4-32 13-32s15 14 13 32z" fill="${col}"/><circle cx="${x}" cy="${y-46}" r="11" fill="${DP.skinB}"/><path d="M${x-9} ${y-50}a10 10 0 0 1 15 -5" fill="none" stroke="${DP.hair}" stroke-width="3" stroke-linecap="round"/>`;
+/* kneeling toddler, dir -1 faces left, 1 faces right */
+const dpToddler=(x,y,dir=-1,col=DP.clay)=>`<ellipse cx="${x-dir*10}" cy="${y-5}" rx="18" ry="6" fill="${col}"/><path d="M${x-13} ${y-6}c-2-22 3-38 13-38s15 16 13 38z" fill="${col}"/><circle cx="${x+dir*2}" cy="${y-55}" r="12" fill="${DP.skinB}"/><path d="M${x+dir*2-10} ${y-60}a11 11 0 0 1 17 -5" fill="none" stroke="${DP.hair}" stroke-width="3.5" stroke-linecap="round"/>`;
+/* kneeling adult; (x,y) = knees on floor; dir -1 faces left */
+const dpAdult=(x,y,dir=-1,col=DP.denim)=>`<ellipse cx="${x-dir*14}" cy="${y-6}" rx="26" ry="7" fill="${DP.denimD}"/><path d="M${x-17} ${y-8}c-3-30 2-56 17-56s20 26 17 56z" fill="${col}"/><circle cx="${x+dir*3}" cy="${y-77}" r="13.5" fill="${DP.skin}"/><path d="M${x+dir*3-13} ${y-80}a13 13 0 0 1 24 -6" fill="none" stroke="${DP.hair}" stroke-width="6" stroke-linecap="round"/>`;
+const dpArm=(x1,y1,x2,y2,col=DP.denim,w=8,bend=0)=>{const mx=(x1+x2)/2+bend,my=(y1+y2)/2+Math.abs(bend)*.6;return `<path d="M${x1} ${y1}Q${mx} ${my} ${x2} ${y2}" fill="none" stroke="${col}" stroke-width="${w}" stroke-linecap="round"/><circle cx="${x2}" cy="${y2}" r="${w*.55}" fill="${DP.skin}"/>`};
+const dpDash=(d,col=DP.muted,ends='end')=>`<path d="${d}" fill="none" stroke="${col}" stroke-width="2" stroke-dasharray="5 6" stroke-linecap="round" ${ends!=='none'?`marker-end="url(#nArr${col==='#E9C46A'?'G':''})"`:''} ${ends==='both'?`marker-start="url(#nArrS)"`:''}/>`;
+const dpBubble=(x,y,w,h,inner,tail='left')=>`<path d="M${x+10} ${y}h${w-20}a10 10 0 0 1 10 10v${h-20}a10 10 0 0 1 -10 10h-${w/2-12}l${tail==='left'?-10:10} 9 ${tail==='left'?-3:-17} -9h-${w/2-25}a10 10 0 0 1 -10 -10v-${h-20}a10 10 0 0 1 10 -10z" fill="#FFFDF8" stroke="#E2D7C4"/>${inner}`;
+const dpStar=(x,y,r=6,col=DP.ochre)=>`<path d="M${x} ${y-r}L${x+r*.28} ${y-r*.28}L${x+r} ${y}L${x+r*.28} ${y+r*.28}L${x} ${y+r}L${x-r*.28} ${y+r*.28}L${x-r} ${y}L${x-r*.28} ${y-r*.28}Z" fill="${col}"/>`;
+const dpTorch=(x,y,ang)=>`<g transform="rotate(${ang} ${x} ${y})"><rect x="${x-16}" y="${y-4.5}" width="20" height="9" rx="3" fill="#5D5148"/><rect x="${x+3}" y="${y-6.5}" width="6" height="13" rx="2" fill="${DP.ochre}"/></g>`;
+const dpBasket=(x,y)=>`<path d="M${x} ${y}h54l-6 26h-42z" fill="${DP.clay}"/><path d="M${x+4} ${y+8}h46M${x+6} ${y+16}h42" stroke="${DP.claySoft}" stroke-width="1.4" opacity=".55"/><path d="M${x+14} ${y}v26M${x+27} ${y}v26M${x+40} ${y}v26" stroke="${DP.claySoft}" stroke-width="1.2" opacity=".35"/>`;
+const dpBowl=(x,y,r=11)=>`<path d="M${x-r} ${y}a${r} ${r} 0 0 0 ${2*r} 0z" fill="${DP.denim}"/><rect x="${x-r-1}" y="${y-2}" width="${2*r+2}" height="3" rx="1.5" fill="${DP.denimD}"/><path d="M${x-r*.5} ${y+3}a${r*.6} ${r*.6} 0 0 0 ${r*.45} ${r*.5}" stroke="#FFFDF8" stroke-width="2" fill="none" opacity=".8" stroke-linecap="round"/>`;
+const dpBox=(x,y,w,h,open=false)=>`${open?`<path d="M${x} ${y}l-14 -20h${w*.45}l10 20z" fill="#BF8D3D"/><path d="M${x+w} ${y}l14 -20h-${w*.45}l-10 20z" fill="#BF8D3D"/>`:`<path d="M${x} ${y}l10 -10h${w}l-10 10z" fill="#BF8D3D"/>`}<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${DP.ochre}"/><path d="M${x+w} ${y}l10 -10v${h}l-10 10z" fill="#B8893B"/>`;
+const dpPause=(x,y)=>`<circle cx="${x}" cy="${y}" r="13" fill="${DP.ochreS}"/><rect x="${x-5}" y="${y-6}" width="3.6" height="12" rx="1.5" fill="${DP.ochreD}"/><rect x="${x+1.4}" y="${y-6}" width="3.6" height="12" rx="1.5" fill="${DP.ochreD}"/>`;
+const dpScarf=(x,y)=>`<path d="M${x} ${y}q10 -6 20 0t20 0t16 -2l-3 26q-9 5 -18 0t-19 1t-19 -2z" fill="${DP.blush}" opacity=".88"/>`;
+const dpTeddy=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle cx="-7" cy="-14" r="4" fill="${DP.blush}"/><circle cx="7" cy="-14" r="4" fill="${DP.blush}"/><circle cy="-8" r="8" fill="${DP.blush}"/><ellipse cy="5" rx="9" ry="9" fill="${DP.blush}"/></g>`;
+const dpCone=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse rx="7" ry="11" fill="${DP.clay}"/><path d="M-6 -4l6 3 6-3M-6 3l6 3 6-3M-4 -9l4 2 4-2" stroke="${DP.claySoft}" stroke-width="1.2" fill="none" opacity=".7"/></g>`;
+const dpBrush=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s}) rotate(-20)"><rect x="-14" y="-3" width="18" height="6" rx="3" fill="${DP.denim}"/><rect x="3" y="-6" width="11" height="12" rx="2" fill="${DP.denimD}"/><path d="M14 -5h4M14 -1.5h4M14 2h4M14 5h4" stroke="${DP.denimD}" stroke-width="1.4"/></g>`;
+
+const DIAG={
+ a0:[
+  {l:'Lay them by the window',s:()=>`${dpRoom()}${dpWin(20,16,60,70)}${dpRays('72,94 80,40 132,124 98,124')}<ellipse cx="168" cy="125" rx="54" ry="6" fill="${DP.blushS}"/>${dpBabyLie(140,114)}`},
+  {l:'Pass the scarf slowly',s:()=>`${dpRoom()}${dpWin(20,16,60,70)}${dpRays('72,94 80,40 132,124 98,124')}<ellipse cx="168" cy="125" rx="54" ry="6" fill="${DP.blushS}"/>${dpBabyLie(140,114)}<ellipse cx="160" cy="110" rx="30" ry="10" fill="${DP.ink}" opacity=".13"/>${dpScarf(112,64)}${dpArm(200,62,168,66,DP.denim,7,-4)}${dpAdult(212,124)}${dpDash('M116 52 H170','#8A7A62','both')}`},
+  {l:'Stop when they look away',s:()=>`${dpRoom()}${dpWin(20,16,60,70)}${dpRays('72,94 80,40 132,124 98,124')}<ellipse cx="168" cy="125" rx="54" ry="6" fill="${DP.blushS}"/>${dpBabyLie(140,114)}${dpDash('M132 108 Q112 104 104 92','#8A7A62')}<path d="M176 104q8-4 16 0t14 0l-2 14q-7 3-14 0t-14 0z" fill="${DP.blush}" opacity=".88"/>${dpArm(200,62,186,104,DP.denim,7,10)}${dpAdult(212,124)}${dpPause(152,52)}`}],
+ a6:[
+  {l:'Set the basket by the window',s:()=>`${dpRoom()}${dpWin(16,14,54,64)}${dpRays('64,86 70,36 128,124 92,124')}${dpBowl(98,98)}<ellipse cx="117" cy="90" rx="5" ry="7" fill="${DP.ochre}"/><rect x="115.5" y="94" width="3" height="10" fill="${DP.ochre}"/><path d="M122 98q6-8 14-2l-2 6h-12z" fill="${DP.blush}"/>${dpBasket(84,98)}${dpBabySit(176,124)}`},
+  {l:'Wait while they reach',s:()=>`${dpRoom()}${dpWin(16,14,54,64)}${dpRays('64,86 70,36 128,124 92,124')}${dpBowl(98,98)}<ellipse cx="117" cy="90" rx="5" ry="7" fill="${DP.ochre}"/><rect x="115.5" y="94" width="3" height="10" fill="${DP.ochre}"/>${dpBasket(84,98)}${dpBabySit(150,124)}${dpArm(144,96,112,94,DP.ochre,6,4)}${dpAdult(212,124)}${dpArm(204,66,192,104,DP.denim,7,10)}${dpDash('M200 40 Q176 30 160 60','#8A7A62')}`},
+  {l:'Say what they find',s:()=>`${dpRoom()}${dpWin(16,14,54,64)}${dpRays('64,86 70,36 128,124 92,124')}${dpBasket(84,98)}${dpBabySit(150,124)}${dpArm(144,94,142,68,DP.ochre,6,-6)}${dpArm(156,94,160,68,DP.ochre,6,6)}${dpBowl(151,66,13)}${dpStar(168,52,7)}${dpAdult(212,124)}${dpArm(204,66,192,104,DP.denim,7,10)}${dpBubble(158,8,64,34,`${dpBowl(180,26,7)}${dpStar(200,22,5)}`,'right')}`}],
+ a12:[
+  {l:'Shine a soft spot',s:()=>`${dpRoom(1)}<polygon points="78,86 82,76 176,40 176,72" fill="#F2CF78" opacity=".16"/><circle cx="176" cy="56" r="24" fill="${DP.ochre}" opacity=".22"/><circle cx="176" cy="56" r="13" fill="#F2CF78"/>${dpAdult(44,124,1)}${dpArm(52,64,74,82,DP.denim,7,-6)}${dpTorch(78,82,-20)}`},
+  {l:'Move it slowly',s:()=>`${dpRoom(1)}<polygon points="78,86 82,76 196,84 196,108" fill="#F2CF78" opacity=".15"/><circle cx="196" cy="96" r="22" fill="${DP.ochre}" opacity=".22"/><circle cx="196" cy="96" r="12" fill="#F2CF78"/>${dpDash('M168 40 Q206 52 198 78','#E9C46A')}<circle cx="164" cy="40" r="7" fill="#F2CF78" opacity=".3"/>${dpAdult(44,124,1)}${dpArm(52,64,74,82,DP.denim,7,-6)}${dpTorch(78,82,4)}${dpToddler(150,124,1)}${dpArm(156,84,180,94,DP.clay,6,-4)}`},
+  {l:'Let them catch it',s:()=>`${dpRoom(1)}<polygon points="78,86 82,76 186,104 186,118" fill="#F2CF78" opacity=".15"/><circle cx="186" cy="112" r="22" fill="${DP.ochre}" opacity=".25"/><circle cx="186" cy="112" r="11" fill="#F2CF78"/>${dpAdult(44,124,1)}${dpArm(52,64,74,82,DP.denim,7,-6)}${dpTorch(78,82,16)}${dpToddler(158,124,1)}${dpArm(164,84,184,110,DP.clay,6,-6)}${dpStar(206,92,6,'#F2CF78')}<circle cx="120" cy="36" r="9" fill="#F2CF78" opacity=".35"/>${dpDash('M196 80 Q170 30 132 36','#E9C46A')}`}],
+ a18:[
+  {l:'Reach in without looking',s:()=>`${dpRoom()}${dpBox(66,78,84,46)}<circle cx="108" cy="101" r="12" fill="${DP.ink}"/><g opacity=".55" fill="none" stroke="#FFFDF8" stroke-width="1.6" stroke-dasharray="3 3"><ellipse cx="84" cy="101" rx="7" ry="11"/><circle cx="132" cy="96" r="7"/><ellipse cx="132" cy="110" rx="8" ry="7"/></g>${dpToddler(190,124,-1)}${dpArm(182,84,112,100,DP.clay,7,6)}`},
+  {l:'Describe, don’t reveal',s:()=>`${dpRoom()}${dpBox(66,78,84,46)}<circle cx="108" cy="101" r="12" fill="${DP.ink}"/>${dpToddler(190,124,-1)}${dpArm(182,84,112,100,DP.clay,7,6)}${dpAdult(30,124,1)}${dpBubble(50,8,92,38,`<path d="M62 27l6-7 6 7 6-7 6 7" fill="none" stroke="${DP.clay}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M94 25q6-8 12 0t12 0" fill="none" stroke="${DP.sage}" stroke-width="2.6" stroke-linecap="round"/><circle cx="130" cy="25" r="5" fill="${DP.blush}"/>`)}`},
+  {l:'Shine the torch and look',s:()=>`${dpRoom()}<polygon points="60,58 64,50 120,72 96,80" fill="${DP.ochre}" opacity=".28"/>${dpTeddy(96,62,.9)}${dpCone(116,64,.9)}${dpBrush(134,70,.9)}${dpBox(66,78,84,46,true)}${dpAdult(30,124,1)}${dpArm(38,64,56,58,DP.denim,7,-6)}${dpTorch(60,54,20)}${dpToddler(190,124,-1)}${dpStar(150,40,6)}`}]};
+function diagSVG(a,i,title=''){const d=DIAG[a][i];return `<svg viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${esc(title||d.l)}"><g filter="url(#nWob)">${d.s()}</g><rect width="240" height="160" filter="url(#nGrain)" opacity=".16" style="mix-blend-mode:multiply"/></svg>`}
+
+/* ---------------- print: a Letter-size worksheet, built like the brand's printable anatomy ---------------- */
+const STEPIMG={
+ a0:['cf069ca9-775d-4dde-a812-14295964e1d8','07edf82e-a47c-435a-adab-04167fc51f4c','ae658f7c-d48f-4fe0-af27-b2e34df3e284'],
+ a6:['3850524d-0a03-4c25-8b84-597ada609fec','32efe41f-ee16-4b8e-ab29-860dbaae9e68','c2eeb321-2826-437f-89bb-53e8b5db2ac6'],
+ a12:['c7b48a94-0096-4b81-aacc-dd050213186f','2e4e363c-b24a-4f43-a37c-a549720d10ce','6d17cc9b-dbff-484d-9bd6-c6b90d2631b0'],
+ a18:['8add990e-3328-4c59-8bae-0eecd155da1d','38fcef76-259d-4cec-8b12-2111b6fac0db','100c6ce5-6f56-4d35-84d0-8d4330ec5a1c']};
+/* Krea (Seedream 5.5) picture on top; the drawn diagram underneath shows if the picture can't load */
+const stepPic=(a,i)=>`<div class="stp">${diagSVG(a,i)}<img src="${KREA+STEPIMG[a][i]}.png" alt="" loading="eager" onerror="this.remove()"></div>`;
+const STAR='<svg class="pstar" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.6 6.4 6.9.5-5.3 4.4 1.7 6.7L12 16.8l-5.9 3.7 1.7-6.7-5.3-4.4 6.9-.5Z" fill="#D4A548"/></svg>';
+function buildPrint(solo=new Set()){const k=kid(),a=viewAge(),g=AGES.find(x=>x.id===a),A=ACTIONS[a],acts=ACT[a];
+ const sIdx=acts.findIndex(x=>x.k==='sensory'),others=acts.map((x,i)=>i).filter(i=>i!==sIdx);
+ const groups=[];for(let j=0;j<others.length;j+=2){const pr=others.slice(j,j+2);if(pr.length>1&&solo.has(pr[0]))groups.push([pr[0]],[pr[1]]);else groups.push(pr)}
+ const total=1+(sIdx>=0?1:0)+groups.length,pageOf={};let pn=2;if(sIdx>=0)pageOf[sIdx]=pn++;groups.forEach(g=>{g.forEach(i=>pageOf[i]=pn);pn++});
+ const head=(sub)=>`<p class="pmh">God made light · ${g.label} · ${sub}</p>`;
+ const foot=(n)=>`<div class="pfoot"><span>Play · Pray · Grow</span>${STAR}<span class="pnum">${n} / ${total}</span></div>`;
+ const ct=(n,t,ic)=>`<p class="ct">${ic?ico(ic,14):''}${n?`${n}. `:''}${t}</p>`;
+ const meta=x=>`${x.min} · ${PREP[x.prep]} · ${x.where}`;
+ const kindTag=x=>`<p class="pkind"><span class="dot" style="background:${HUE[CATS[x.k].c]}"></span>${CATS[x.k].n}</p>`;
+ const lv=x=>`<p><b>Just starting:</b> ${esc(x.lv[0])}</p><p><b>Ready for more:</b> ${esc(x.lv[1])}</p>`;
+ const extras=x=>`${x.swap?`<p><b>Less prep:</b> ${esc(x.swap)}</p>`:''}${x.rain?`<p><b>Another way:</b> ${esc(x.rain)}</p>`:''}${x.safe?`<p class="psafe"><b>Safety:</b> ${esc(x.safe)}</p>`:''}`;
+ /* page 1: the week at a glance */
+ let h=`<section class="pg"><div class="pin">
+ <p class="pmh">Neri · This week’s guide · ${g.label}</p>
+ <h1 class="ph1">God made <i>light</i></h1>
+ <p class="psub">Genesis 1:1–5 · Play ideas for ${esc(k.name)}</p>
+ <p class="pmh prh">Meet · Play · Sing · Live</p>${STAR}
+ <div class="cells">
+  <div class="cell full">${ct(1,'Meet the story','scripture')}<p class="ci">Read it aloud. Say the memory verse often this week.</p>
+   <p class="pverse">“And God said, Let there be light: and there was light.” <span>Genesis 1:3</span></p>
+   <div class="pparts">${SCR[S.trans].map(([v,t])=>`<p><b>Verses ${v}</b>${esc(t)}</p>`).join('')}</div></div>
+ </div>
+ <div class="pcols"><div class="pcl">
+  <div class="cell">${ct(2,'Sing','sing')}<p class="ci">To the tune of “Twinkle, Twinkle, Little Star”.</p>
+   <p class="plyric">${SONG.slice(0,4).map(esc).join('<br>')}<br><span>(Repeat the first two lines.)</span></p>
+   <p class="psmall"><b>Actions.</b> ${esc(A.tip)}</p><ol class="pact">${A.lines.map(l=>`<li>${esc(l)}</li>`).join('')}</ol></div>
+ </div><div class="pcr">
+  <div class="cell">${ct(3,'Pray','prayer')}<p class="ci">${esc(PRAY[a])}</p>
+   <p class="ppray">${prayerLines(k.name).map(esc).join('<br>')}</p></div>
+  <div class="cell">${ct(4,'Everyday moments','everyday')}<p class="ci">No set-up. Notice light as your day happens.</p>
+   <ol class="pmom">${MOM[a].map(([t,s])=>`<li><b>${t}.</b> ${esc(s)}</li>`).join('')}</ol></div>
+ </div></div>
+ <div class="cells">
+  <div class="cell full pbig">${ct(5,'Big truth','corner')}<p class="ptruth">God made light, and it is good.</p></div>
+ </div>${foot(1)}</div></section>`;
+ /* sensory: one full page with step pictures */
+ if(sIdx>=0){const x=acts[sIdx];h+=`<section class="pg"><div class="pin">${head('Play')}
+  ${kindTag(x)}<h2 class="ph2">${esc(x.t)}</h2><p class="psub">${meta(x)}</p>
+  <div class="cells">
+   <div class="cell l">${ct(0,'Need')}<ul class="pul">${x.need.map(n=>`<li>${esc(n)}</li>`).join('')}</ul></div>
+   <div class="cell">${ct(0,'Say')}${x.say.map(s=>`<p class="psay">${esc(s)}</p>`).join('')}</div>
+   <div class="cell full">${ct(0,'Step by step')}<div class="psteps">${x.do.map((d,i)=>`<figure>${stepPic(a,i)}<figcaption><span class="psn">${i+1}</span><b>${esc(DIAG[a][i].l)}</b><span>${esc(d)}</span></figcaption></figure>`).join('')}</div></div>
+   <div class="cell l"><div class="pcorner">${ct(0,'Parent’s corner','corner')}<p>${esc(x.mind)}</p></div><p class="pfaith">“${esc(x.faith)}”</p></div>
+   <div class="cell">${ct(0,'Make it easier or harder')}${lv(x)}${extras(x)}</div>
+  </div>${foot(pageOf[sIdx])}</div></section>`}
+ /* the other kinds of play, two to a page */
+ for(const grp of groups){h+=`<section class="pg" data-first="${grp[0]}" data-n="${grp.length}"><div class="pin">${head('Play')}${grp.map((i,j)=>{const x=acts[i];return `<article class="pact2${j?' second':''}">
+  ${kindTag(x)}<h2 class="ph3">${esc(x.t)}</h2><p class="psub l">${meta(x)}</p>
+  <div class="cells">
+   <div class="cell l">${ct(0,'Need')}<ul class="pul">${x.need.map(n=>`<li>${esc(n)}</li>`).join('')}</ul>${ct(0,'Say')}${x.say.map(s=>`<p class="psay">${esc(s)}</p>`).join('')}</div>
+   <div class="cell">${ct(0,'Do')}<ol class="pol">${x.do.map(n=>`<li>${esc(n)}</li>`).join('')}</ol></div>
+   <div class="cell l"><div class="pcorner">${ct(0,'Parent’s corner','corner')}<p>${esc(x.mind)}</p></div><p class="pfaith">“${esc(x.faith)}”</p></div>
+   <div class="cell">${lv(x)}${extras(x)}</div>
+  </div></article>`}).join('')}${foot(pageOf[grp[0]])}</div></section>`}
+ $('#printDoc').innerHTML=h;
+}
+async function doPrint(){buildPrint();toast('Getting the printable guide ready…');
+ const imgs=[...document.querySelectorAll('#printDoc img')];
+ const wait=Promise.all(imgs.map(i=>i.complete?1:new Promise(r=>{i.addEventListener('load',r);i.addEventListener('error',r)})));
+ const fl=document.fonts?Promise.all(['500 12px Fraunces','italic 400 12px Fraunces','400 12px Figtree','600 12px Figtree','700 12px Figtree'].map(f=>document.fonts.load(f))):1;
+ try{await Promise.race([Promise.all([wait,fl]),new Promise(r=>setTimeout(r,6000))])}catch(e){}
+ const pd=$('#printDoc');pd.style.cssText='display:block;position:absolute;left:-9999px;top:0;width:7.6in';
+ const over=new Set([...pd.querySelectorAll('.pg[data-n="2"]')].filter(p=>{const i=p.querySelector('.pin');return i.scrollHeight>i.clientHeight+1}).map(p=>+p.dataset.first));
+ pd.style.cssText='';if(over.size)buildPrint(over);
+ let ok=true;try{window.print()}catch(e){ok=false}
+ if(!ok)toast('Printing isn’t allowed in this preview. Open the website version.')}
+
+document.addEventListener('click',e=>{if(e.target.closest('[data-print]'))doPrint()});
+
+/* ---------------- discover ---------------- */
+function renderDiscover(){const a=S.dAge||kidGroup(kid());
+ $('#dAges').innerHTML=AGES.map(x=>`<button class="chip ${x.id===a?'on':''}" data-dage="${x.id}" aria-pressed="${x.id===a}">${adot(x.id)}${x.label}</button>`).join('');
+ const cats=[['all','All'],...Object.keys(CATS).map(k=>[k,CATS[k].n])];
+ $('#dCats').innerHTML=cats.map(([k,n])=>`<button class="chip kind ${S.dCat===k?'on':''}" data-dcat="${k}" aria-pressed="${S.dCat===k}">${k!=='all'?`<span class="dot" style="background:${HUE[CATS[k].c]}"></span>`:''}${n}</button>`).join('');
+ [['#fNoPrep','fNo'],['#fQuick','fQ'],['#fDeep','fD'],['#fOut','fO']].forEach(([id,f])=>{$(id).classList.toggle('on',!!S[f]);$(id).setAttribute('aria-pressed',!!S[f])});
+ const lastMin=x=>parseInt(x.min.split('–').pop());
+ const res=ACT[a].map((x,i)=>[x,i]).filter(([x])=>(S.dCat==='all'||x.k===S.dCat)&&(!S.fNo||x.prep==='none')&&(!S.fQ||lastMin(x)<=5)&&(!S.fD||lastMin(x)>=10)&&(!S.fO||/out/.test(x.where)));
+ const kind=S.dCat==='all'?'':CATS[S.dCat].n.toLowerCase()+' ';
+ $('#dCount').textContent=`${res.length} ${kind}${res.length===1?'activity':'activities'} · ${AGES.find(x=>x.id===a).label}`;
+ $('#dActs').innerHTML=res.length?res.map(([x,i])=>actTile(a,i,x,'d')).join(''):`<div class="empty">Nothing matches yet. Try another kind of play, or clear a filter.<br><button class="link" id="clearF">Clear filters</button></div>`;
+ const cf=$('#clearF');if(cf)cf.onclick=()=>{S.dCat='all';S.fNo=S.fQ=S.fD=S.fO=false;save();renderDiscover()};
+ $('#lib').innerHTML=BOOKS.map(b=>`<div class="bk">${b}</div>${STORIES.filter(s=>s.b===b).map(s=>{const m=STORIES.indexOf(s);return `<button class="it" ${s.on?'data-go="guide"':'disabled'}><span class="th mk">${markSVG(m)}</span><span style="flex:1"><b>${s.t}</b><span>${s.r} · ${s.on?'This month':`Month ${m+1}`}</span></span></button>`}).join('')}`).join('');
+}
+$('#dAges').onclick=e=>{const b=e.target.closest('[data-dage]');if(b){S.dAge=b.dataset.dage;save();renderDiscover()}};
+$('#dCats').onclick=e=>{const b=e.target.closest('[data-dcat]');if(b){S.dCat=b.dataset.dcat;save();renderDiscover()}};
+$('#fNoPrep').onclick=()=>{S.fNo=!S.fNo;save();renderDiscover()};
+$('#fQuick').onclick=()=>{S.fQ=!S.fQ;if(S.fQ)S.fD=false;save();renderDiscover()};
+$('#fOut').onclick=()=>{S.fO=!S.fO;save();renderDiscover()};
+$('#fDeep').onclick=()=>{S.fD=!S.fD;if(S.fD)S.fQ=false;save();renderDiscover()};
+
+/* ---------------- journey: cut-paper landscape with footsteps ---------------- */
+const MH=640,GAP=215,X0=210,EXTRA=3,LAND=KREA+'2b1cbdf3-cb9a-443a-bee9-1491e9a79b7f.png',TW=MH*3328/1248;
+const MW=X0+(STORIES.length+EXTRA)*GAP+60;
+const stepPt=i=>({x:X0+i*GAP,y:448+34*Math.sin(i*.9+.4)});
+let rnd=1;const R=()=>(rnd=(rnd*16807)%2147483647)/2147483647;
+function wave(base,amp,f1,ph,amp2,f2){let d=`M0 ${MH}L0 ${base}`;for(let x=0;x<=MW;x+=40){const y=base+amp*Math.sin(x*f1+ph)+amp2*Math.sin(x*f2+ph*2.3);d+=`L${x} ${y.toFixed(1)}`}return d+`L${MW} ${MH}Z`}
+function seg(i){const p=k=>stepPt(Math.max(0,Math.min(STORIES.length+EXTRA-1,k)));const a=p(i-1),b=p(i),c=p(i+1),d=p(i+2);
+ const c1={x:b.x+(c.x-a.x)/6,y:b.y+(c.y-a.y)/6},c2={x:c.x-(d.x-b.x)/6,y:c.y-(d.y-b.y)/6};
+ return `M${b.x} ${b.y}C${c1.x.toFixed(1)} ${c1.y.toFixed(1)} ${c2.x.toFixed(1)} ${c2.y.toFixed(1)} ${c.x} ${c.y}`}
+const litSet=()=>S.preview?new Set(STORIES.slice(0,5).map(s=>s.id)):new Set(S.done);
+function mapSVG(){rnd=7;const lit=litSet(),N=STORIES.length,firstOpen=STORIES.findIndex(s=>!lit.has(s.id));
+ const trees=[];for(let x=120;x<MW;x+=150+R()*120){const y=338+R()*26,h=34+R()*30,kind=R();
+  trees.push(kind<.5?`<g transform="translate(${x.toFixed(0)} ${y.toFixed(0)})"><rect x="-2.5" y="-4" width="5" height="16" fill="#6B5240"/><path d="M0 ${-h} L${h*.42} -2 L${-h*.42} -2Z" fill="#5F7050" filter="url(#torn)"/></g>`
+   :`<g transform="translate(${x.toFixed(0)} ${y.toFixed(0)})"><rect x="-2.5" y="-6" width="5" height="18" fill="#6B5240"/><circle cy="${-h*.45}" r="${h*.42}" fill="${R()<.5?'#7F8F68':'#9AA77F'}" filter="url(#torn)"/></g>`)}
+ const flowers=[];for(let x=60;x<MW;x+=70+R()*90){const y=592+R()*38;flowers.push(`<circle cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="${(3+R()*2).toFixed(1)}" fill="${['#D9A796','#F3E1D9','#D4A548','#FBF8F2'][Math.floor(R()*4)]}"/>`)}
+ const clouds=[];for(let x=220;x<MW;x+=380+R()*260){const y=150+R()*60,s=.8+R()*.6;clouds.push(`<g transform="translate(${x.toFixed(0)} ${y.toFixed(0)}) scale(${s.toFixed(2)})" filter="url(#torn)"><ellipse rx="46" ry="15" fill="#FBF8F2" opacity=".92"/><ellipse cx="-18" cy="-10" rx="22" ry="15" fill="#FBF8F2" opacity=".92"/><ellipse cx="14" cy="-13" rx="26" ry="18" fill="#FBF8F2" opacity=".92"/></g>`)}
+ let base='',hot='';for(let i=0;i<N+EXTRA-1;i++){base+=`<path d="${seg(i)}"/>`;if(i<N-1&&lit.has(STORIES[i].id)&&lit.has(STORIES[i+1].id))hot+=`<path d="${seg(i)}"/>`}
+ const steps=[];for(let i=0;i<N+EXTRA;i++){const p=stepPt(i),q=stepPt(i+1),ang=Math.atan2(q.y-p.y,q.x-p.x)*180/Math.PI+90,s=STORIES[i],on=s&&lit.has(s.id),isNext=i===firstOpen,fade=i>=N?Math.max(.12,.5-(i-N)*.15):1,mir=i%2?-1:1;
+  const cls=`step${on?' lit':''}${on&&s.id===S.lastLit?' new':''}`;
+  const fill=on?'#D4A548':'rgba(251,248,242,.55)',stroke=on?'#8A6418':'#9C8A6E';
+  const feet=`<g class="feet" filter="url(#nWob)"><use href="#ft" transform="translate(-4 -17) rotate(${ang.toFixed(1)}) scale(${1.75*mir} 1.75)" fill="${fill}" stroke="${stroke}" stroke-width="${on?.8:1}" ${on?'':'stroke-dasharray="2.5 2.5"'}/><use href="#ft" transform="translate(8 19) rotate(${ang.toFixed(1)}) scale(${1*mir} 1)" fill="${fill}" stroke="${stroke}" stroke-width="${on?1.2:1.5}" ${on?'':'stroke-dasharray="3 3"'}/></g>`;
+  let lab='';
+  if(on)lab=`<g transform="translate(0 58)"><rect x="-96" y="0" width="192" height="50" rx="9" fill="#FBF8F2" stroke="#D4A548" stroke-width="1.5" filter="url(#torn)"/><svg x="-88" y="7" width="36" height="36" viewBox="0 0 64 64">${MARK[i]}</svg><text x="-46" y="21" style="font:500 14.5px var(--serif)" fill="#362C25">${esc(s.t)}</text><text x="-46" y="39" style="font:600 11.5px var(--sans)" fill="#7A5A16">${esc(s.r)}</text></g>`;
+  else if(isNext)lab=`<g transform="translate(0 58)"><rect x="-96" y="0" width="192" height="50" rx="9" fill="rgba(251,248,242,.85)" stroke="#9C8A6E" stroke-dasharray="4 4"/><svg x="-88" y="7" width="36" height="36" viewBox="0 0 64 64" opacity=".55">${MARK[i]}</svg><text x="-46" y="21" style="font:600 10.5px var(--sans);letter-spacing:.14em" fill="#6E6054">NEXT STORY</text><text x="-46" y="39" style="font:500 14px var(--serif)" fill="#362C25">${esc(s.t)}</text></g>`;
+  steps.push(`<g class="${cls}" transform="translate(${p.x} ${p.y.toFixed(1)})" opacity="${fade}">${on?'<ellipse class="halo" rx="64" ry="46" fill="url(#halo)"/>':''}${feet}${lab}</g>`)}
+ const st=stepPt(0);const startDate=S.started?new Date(S.started+'T12:00').toLocaleDateString('en-CA',{month:'short',day:'numeric',year:'numeric'}):'';
+ return `<svg viewBox="0 0 ${MW} ${MH}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A path of footsteps across a landscape. ${lit.size} of ${N} stories walked.">
+ <defs>
+  <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E6ECEE"/><stop offset=".55" stop-color="#F5EEDF"/><stop offset="1" stop-color="#F4E6C4"/></linearGradient>
+  <radialGradient id="halo"><stop offset="0" stop-color="#F6D57E" stop-opacity=".95"/><stop offset="1" stop-color="#F6D57E" stop-opacity="0"/></radialGradient>
+  <filter id="torn" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency=".045" numOctaves="2" seed="3"/><feDisplacementMap in="SourceGraphic" scale="5"/></filter>
+  <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="8"/><feColorMatrix values="0 0 0 0 .35  0 0 0 0 .28  0 0 0 0 .2  0 0 0 .5 0"/></filter>
+  <filter id="lift" x="-5%" y="-5%" width="110%" height="120%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#362C25" flood-opacity=".16"/></filter>
+  <g id="ft"><path d="M1-11c6 0 8.5 6 7.6 13.5C7.8 10 6.5 18 1 18s-6.9-7.5-7.7-15.5C-7.5-5 -5-11 1-11z"/><circle cx="-3.6" cy="-16.5" r="3.2"/><circle cx="1.6" cy="-18.6" r="2.4"/><circle cx="5.4" cy="-16.8" r="2.1"/><circle cx="8.2" cy="-13.6" r="1.8"/><circle cx="9.6" cy="-9.6" r="1.5"/></g>
+ </defs>
+ <rect width="${MW}" height="${MH}" fill="url(#sky)"/>
+ <circle cx="150" cy="190" r="54" fill="#E9C46A" filter="url(#torn)"/><circle cx="150" cy="190" r="76" fill="#E9C46A" opacity=".18"/>
+ ${clouds.join('')}
+ <g filter="url(#lift)"><path d="${wave(262,26,.0042,.6,14,.011)}" fill="#C7D1D3" filter="url(#torn)"/></g>
+ <g filter="url(#lift)"><path d="${wave(312,22,.0055,2.1,10,.013)}" fill="#AEB99A" filter="url(#torn)"/></g>
+ ${trees.join('')}
+ <g filter="url(#lift)"><path d="${wave(362,14,.004,4,7,.017)}" fill="#E0CFA6" filter="url(#torn)"/></g>
+ <g filter="url(#lift)"><path d="${wave(575,10,.006,1,6,.02)}" fill="#C9B386" filter="url(#torn)" opacity=".7"/></g>
+ ${flowers.join('')}
+ ${[0,1,2].map(i=>`<image href="${LAND}" width="${TW}" height="${MH}" preserveAspectRatio="none" ${i%2?`transform="translate(${(i+1)*TW} 0) scale(-1 1)"`:`x="${i*TW}"`}/>`).join('')}
+ <g fill="none" stroke-linecap="round"><g stroke="#F3EAD8" stroke-width="60" opacity=".75">${base}</g><g stroke="#8A7A62" stroke-width="3.2" stroke-dasharray="0.1 11">${base}</g><g stroke="#B5832A" stroke-width="4.5" stroke-dasharray="0.1 11">${hot}</g></g>
+ <g transform="translate(${st.x-130} ${st.y-40})"><rect x="-4" y="0" width="8" height="70" fill="#6B5240"/><rect x="-66" y="-8" width="132" height="48" rx="6" fill="#FBF8F2" stroke="#948474" filter="url(#torn)"/><text y="12" text-anchor="middle" style="font:600 10.5px var(--sans);letter-spacing:.14em" fill="#6E6054">WE STARTED HERE</text><text y="30" text-anchor="middle" style="font:500 14px var(--serif)" fill="#362C25">${esc(startDate)}</text></g>
+ ${steps.join('')}
+ <g transform="translate(${stepPt(N+EXTRA-1).x+20} ${stepPt(N+EXTRA-1).y-60})" opacity=".85"><text text-anchor="middle" style="font:italic 400 15px var(--serif)" fill="#6E6054">More stories ahead…</text></g>
+ <rect width="${MW}" height="${MH}" filter="url(#grain)" opacity=".22" style="mix-blend-mode:multiply" pointer-events="none"/>
+</svg>`}
+function renderJourney(){const lit=litSet(),n=lit.size;
+ $('#psalm').innerHTML=`${esc(PSALM[S.trans])}<span>Psalm 119:105</span>`;
+ const ct=n?`<b style="color:var(--ink)">${n} ${n===1?'story':'stories'}</b> walked together${S.preview?' (preview)':''}`:'Your first steps light up when you finish a story together.';
+ $('.jsub').innerHTML=`<p id="jCount">${ct}</p><button class="chip" id="prevBtn" aria-pressed="${S.preview}" style="min-height:34px;font-size:12.5px">${S.preview?'Show our real journey':'Prototype: preview 5 months in'}</button>`;
+ $('#prevBtn').onclick=()=>{S.preview=!S.preview;save();renderJourney()};
+ const m=$('#map');m.innerHTML=mapSVG();
+ requestAnimationFrame(()=>{fitMap();goLatest(false);if(S.lastLit&&!S.preview){setTimeout(()=>{toast('A new step lit up');},500);S.lastLit=null;save()}})}
+function fitMap(){const m=$('#map'),svg=m.querySelector('svg');if(!svg)return;const h=m.clientHeight;svg.style.width=(h*MW/MH)+'px'}
+function scrollToStep(i,smooth){const m=$('#map'),h=m.clientHeight,sc=h/MH;m.scrollTo({left:Math.max(0,stepPt(i).x*sc-m.clientWidth/2),behavior:smooth?'smooth':'auto'})}
+function goLatest(smooth){const lit=litSet();let i=-1;STORIES.forEach((s,k)=>{if(lit.has(s.id))i=k});scrollToStep(Math.max(0,i),smooth)}
+$('#toStart').onclick=()=>$('#map').scrollTo({left:0,behavior:'smooth'});
+$('#toNow').onclick=()=>goLatest(true);
+window.addEventListener('resize',()=>{if(cur==='journey')fitMap()});
+{const m=$('#map');let down=false,sx=0,sl=0;
+ m.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse')return;down=true;sx=e.clientX;sl=m.scrollLeft;m.classList.add('drag')});
+ window.addEventListener('pointermove',e=>{if(down)m.scrollLeft=sl-(e.clientX-sx)});
+ window.addEventListener('pointerup',()=>{down=false;m.classList.remove('drag')});}
+$('#favBtn').onclick=()=>{const sv=S.saved.map(s=>{const[a,i]=s.split(':');const x=ACT[a]&&ACT[a][+i];return x?`<button class="act" data-open="${a}:${i}:d" style="margin-bottom:8px">${sym(x.k)}<span><span class="cat">${esc(x.t)}</span><span class="nm">${CATS[x.k].n} · ${AGES.find(y=>y.id===a).label}</span></span></button>`:''}).join('');
+ openSheet(`<div class="ptop"><p class="mast">Favourite activities</p><button class="round" data-close aria-label="Close">${ico('close',20)}</button></div>${sv||'<p class="muted">Tap “Save to favourites” on any activity your child loved, so you can find it again here.</p>'}`)};
+
+/* ---------------- profile ---------------- */
+function renderProfile(){
+ $('#kidList').innerHTML=S.kids.map((k,i)=>{const g=kidGroup(k);return `<div class="kid"><span class="av" style="background:var(${AGES.find(a=>a.id===g).v});${g==='a0'?'color:#362C25':''}">${esc(k.name[0].toUpperCase())}</span><span class="r"><b>${esc(k.name)}, ${ageText(months(k.birth))}</b></span>${S.kids.length>1?`<button class="link" data-del="${i}" aria-label="Remove ${esc(k.name)}">Remove</button>`:''}</div>`}).join('');
+ $('#accEmail').textContent=S.email?`Signed in as ${S.email}`:'Not signed in';
+ applyTheme();renderParts();
+}
+$('#kidList').onclick=e=>{const b=e.target.closest('[data-del]');if(!b)return;S.kids.splice(+b.dataset.del,1);S.active=0;S.view=null;save();renderProfile()};
+$('#addKid').onclick=()=>{$('#kidForm').hidden=false;$('#addKid').hidden=true;$('#nName').focus()};
+$('#cancelKid').onclick=()=>{$('#kidForm').hidden=true;$('#addKid').hidden=false};
+$('#kidForm').onsubmit=e=>{e.preventDefault();const n=$('#nName').value.trim(),b=$('#nBirth').value;if(!n||!b){toast('Add a name and birthday');return}S.kids.push({name:n,birth:b});save();$('#kidForm').reset();$('#kidForm').hidden=true;$('#addKid').hidden=false;renderProfile();toast(`${n} added. Switch between children on Home.`)};
+$('#themeSeg').onclick=e=>{const b=e.target.closest('[data-th]');if(b){S.theme=b.dataset.th;save();applyTheme()}};
+const APP_URL='https://neri-prototype-five.vercel.app';
+async function shareOrCopy(data,copyText,done){try{if(navigator.share){await navigator.share(data);return}}catch(e){if(e&&e.name==='AbortError')return}
+ try{await navigator.clipboard.writeText(copyText);toast(done)}catch(e){openSheet(`<div class="ptop"><p class="mast">Copy and send</p><button class="round" data-close aria-label="Close">${ico('close',20)}</button></div><textarea style="width:100%;min-height:120px;font:15px var(--sans);border:1px solid var(--strong);border-radius:6px;padding:10px;background:var(--raised);color:var(--ink)">${esc(copyText)}</textarea>`)}}
+$('#shareApp').onclick=()=>shareOrCopy({title:'Neri',text:'Neri: Bible stories you play with your little one.',url:APP_URL},`Neri: Bible stories you play with your little one. ${APP_URL}`,'Link copied. Paste it to a friend.');
+$('#invite').onclick=()=>shareOrCopy({title:'Join our family on Neri',text:`Join our family on Neri. Sign in with ${S.email} to see the same children and progress.`,url:APP_URL},`Join our family on Neri. Sign in with ${S.email} at ${APP_URL}`,'Invite copied. Send it to the other parent.');
+$('#reset').onclick=()=>{S=FRESH();save();applyTheme();show('welcome')};
+
+applyTheme();
+const h=location.hash.slice(1);show(['home','guide','discover','journey','profile'].includes(h)?h:'home');
+}
+</script>
+</body>
+</html>
