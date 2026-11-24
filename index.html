@@ -624,7 +624,7 @@ music:'M14.5 3.5a5 5 0 1 0 0 10a5 5 0 1 0 0-10Z M11 12 4.5 18.5 M3.5 17.5l3 3 M1
 science:'M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6S2.5 12 2.5 12Z M12 9.5a2.5 2.5 0 1 0 0 5a2.5 2.5 0 1 0 0-5Z',
 cog:'M4.5 13.5h6.5V20H4.5Z M13 13.5h6.5V20H13Z M8.75 4.5h6.5V11h-6.5Z',
 art:'M14.5 4.5l5 5-8 8-5-5Z M6.5 12.5c-2 1-2.2 3.6-2.8 6 2.5-.5 5-.8 6.3-2.5'};
-function sym(k){return `<span class="sym" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="${ICON[k]}"/></svg></span>`}
+function sym(k){const c=CATS[k].c;return `<span class="sym" style="background:var(--${c}-soft);color:var(--${c}-deep)" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="${ICON[k]}"/></svg></span>`}
 
 /* ---------------- pictures with a calm fallback ---------------- */
 function fallback(key){const c=key==='hero'?'denim':(CATS[(key.split('-')[1])]||{c:'ochre'}).c;
@@ -692,7 +692,7 @@ function renderDone(){const d=S.done.includes('light');const b=$('#doneBox');b.c
  b.innerHTML=d?`<span class="star" style="width:18px;height:18px"></span><p><b style="display:block;font:500 17px var(--serif)">You walked this story together</b>A new pair of footsteps is lit on your journey.</p><button class="btn sm ink" data-go="journey">See it</button>`
  :`<p>Played this story together this month?</p><button class="btn sm" id="markDone">✓ We played this</button>`;
  const m=$('#markDone');if(m)m.onclick=()=>{S.done=[...new Set([...S.done,'light'])];S.lastLit='light';save();renderDone();toast('A new step lit up on your journey')}}
-function actTile(a,i,x,src){const c=CATS[x.k];return `<button class="act" data-open="${a}:${i}:${src}">${sym(x.k)}<span><span class="cat"><span class="dot" style="background:${HUE[c.c]}"></span>${c.n}</span><span class="nm">${esc(x.t)}${src==='d'?' · <i>God made light</i>':''}</span><span class="tags"><span class="tag">${x.min}</span><span class="tag">${PREP[x.prep]}</span>${S.saved.includes(a+':'+i)?'<span class="tag">★ Saved</span>':''}</span></span></button>`}
+function actTile(a,i,x,src){const c=CATS[x.k];return `<button class="act" data-open="${a}:${i}:${src}">${sym(x.k)}<span><span class="cat">${c.n}</span><span class="nm">${esc(x.t)}${src==='d'?' · <i>God made light</i>':''}</span><span class="tags"><span class="tag">${x.min}</span><span class="tag">${PREP[x.prep]}</span>${S.saved.includes(a+':'+i)?'<span class="tag">★ Saved</span>':''}</span></span></button>`}
 function renderParts(){$('#parts').innerHTML=SCR[S.trans].map(([v,t],i)=>`<div class="part"><div class="row" style="justify-content:space-between;gap:8px"><b>PART ${i+1} · VERSES ${v}</b>${S.trans==='kjv'?`<button class="chip" data-read="p${i+1}" style="min-height:36px">▶ Listen</button>`:''}</div><p>${esc(t)}</p></div>`).join('');$$('#trans button,#transSeg button').forEach(b=>b.classList.toggle('on',b.dataset.t===S.trans))}
 $('#ageSwitch').onclick=()=>{const own=viewAge()===kidGroup(kid());if(!own){S.view=null;save();renderGuide();$('#ageChips').hidden=true;return}$('#ageChips').hidden=!$('#ageChips').hidden};
 $('#ageChips').onclick=e=>{const b=e.target.closest('[data-age]');if(!b)return;S.view=b.dataset.age===kidGroup(kid())?null:b.dataset.age;save();renderGuide()};
