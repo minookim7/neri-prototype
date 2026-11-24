@@ -307,7 +307,8 @@ ul.moments b{display:block;font:500 17px var(--serif)}
 .qf.on{border-style:solid;border-color:var(--sage-deep);background:var(--sage-soft);color:var(--sage-deep)}
 .qf.on .bx{background:var(--sage-deep);border-color:var(--sage-deep)}
 .qf.on .bx::after{content:"";width:5px;height:2.5px;border-left:1.8px solid var(--sage-soft);border-bottom:1.8px solid var(--sage-soft);transform:translateY(-1px) rotate(-45deg)}
-.steps{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -20px;padding:2px 20px 6px;scrollbar-width:none}
+.steps{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:20px;margin:0 -20px;padding:2px 20px 6px;scrollbar-width:none}
+.steps::after{content:"";flex:0 0 10px}
 .steps::-webkit-scrollbar{display:none}
 .stc{flex:0 0 84%;scroll-snap-align:start;margin:0;background:var(--raised);border:1px solid var(--line);border-radius:12px;overflow:hidden}
 .stp{position:relative;aspect-ratio:3/2;background:var(--sunk)}
